@@ -3,102 +3,102 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
-
+import styles from "./products.module.css";
 
 interface Product {
   id: number;
   title: string;
   price: number;
   thumbnail: string;
+  category: string;
 }
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("all");
+  const [sort, setSort] = useState("");
+
   useEffect(() => {
     fetch("https://dummyjson.com/products")
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data.products); // store products
-        setLoading(false); // stop loader
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data.products);
         setLoading(false);
       });
   }, []);
 
-  // Show loader while API is loading
-  if (loading) {
-    return <p style={{ padding: "20px" }}>Loading products...</p>;
-  }
+  if (loading) return <p className={styles.page}>Loading products...</p>;
+
+  const categories = ["all", ...new Set(products.map(p => p.category))];
+
+  const filteredProducts = products
+    .filter(p =>
+      p.title.toLowerCase().includes(search.toLowerCase())
+    )
+    .filter(p =>
+      category === "all" || p.category === category
+    )
+    .sort((a, b) => {
+      if (sort === "low") return a.price - b.price;
+      if (sort === "high") return b.price - a.price;
+      return 0;
+    });
 
   return (
-    <main style={{ padding: "20px" }}>
+    <main className={styles.page}>
       <Navbar />
 
-      {/* Product Grid */}
-      <div style={styles.grid}>
-        {products.map((product) => (
+      {/* CONTROLS */}
+      <div className={styles.controls}>
+        <input
+          className={styles.search}
+          placeholder="Search products..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+
+        <select
+          className={styles.select}
+          value={category}
+          onChange={e => setCategory(e.target.value)}
+        >
+          {categories.map(cat => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+
+        <select
+          className={styles.select}
+          value={sort}
+          onChange={e => setSort(e.target.value)}
+        >
+          <option value="">Sort by</option>
+          <option value="low">Price: Low → High</option>
+          <option value="high">Price: High → Low</option>
+        </select>
+      </div>
+
+      {/* PRODUCT GRID */}
+      <div className={styles.grid}>
+        {filteredProducts.map(product => (
           <Link
             key={product.id}
             href={`/products/${product.id}`}
-            style={styles.card}
+            className={styles.card}
           >
-            <img style={styles.card}
+            <img
               src={product.thumbnail}
               alt={product.title}
-
+              className={styles.image}
             />
-
-            <h3 style={styles.title}>{product.title}</h3>
-            <p style={styles.pstyle}>From Rs. {product.price}</p>
+            <h3 className={styles.title}>{product.title}</h3>
+            <p className={styles.price}>From Rs. {product.price}</p>
           </Link>
         ))}
       </div>
     </main>
   );
 }
-
-
-const styles = {
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-    gap: "20px",
-    marginTop: "20px",
-  },
-  card: {
-    border: "1px solid #ddd",
-    padding: "10px",
-    textDecoration: "none",
-    color: "#000",
-    borderRadius: "8px",
-    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-    transition: "transform 0.2s",
-  },
-  image: {
-    width: "100%",
-    height: "160px",
-    objectFit: "cover" as const,
-    marginBottom: "10px",
-  },
-  title: {
-    backgroundColor: "orange",
-    padding: "5px",
-    borderRadius: "4px",
-    fontSize: "16px",
-    fontWeight: "bold",
-    margin: "0",
-    color: "white",
-  },
-  pstyle: {
-    fontWeight: "bold",
-    marginTop: "5px",
-    backgroundColor: "yellow",
-    padding: "5px",
-    borderRadius: "4px",
-  }
-
-};
