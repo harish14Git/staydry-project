@@ -3,7 +3,6 @@
   padding: 40px 60px;
   font-size: 14px;
 }
-
 .wrapper {
   display: flex;
   justify-content: space-between;
@@ -83,40 +82,41 @@
   flex-direction: column;
   gap: 12px;
 }
-
 .contactRow {
   display: flex;
   align-items: center;
-  gap: 8px; /* space between icon and text */
+  gap: 10px; 
 }
-
 .callText {
   font-weight: 600;
 }
 .socialRow {
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* right aligned like design */
-  gap: 24px;
+  justify-content: center; 
   margin-top: 30px;
+  gap:20px;
 }
-
 .icons {
   display: flex;
   gap: 14px;
 }
-
 .brandText {
-  font-size: 13px;
-  white-space: nowrap; /* prevents text breaking */
+  font-size: 15px;
+  white-space: nowrap;
+  row-gap: 50px;
 }
-
 .mailRow {
   display: flex;
   align-items: center;
-  gap: 8px; /* space between icon and text */
+  gap: 10px; 
 }
-
 .mailText {
   font-weight: 600;
+}
+.brand{
+  font-weight:900;
+  font-size:1.7rem;
+  font-style:italic;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

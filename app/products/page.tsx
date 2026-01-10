@@ -20,6 +20,20 @@ export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("");
+  const [showTop, setShowTop] = useState(false);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const handleClearFilters = () => {
+    setSearch("");
+    setCategory("all");
+    setSort("");
+  };
 
   useEffect(() => {
     fetch("https://dummyjson.com/products")
@@ -29,6 +43,19 @@ export default function ProductsPage() {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowTop(true);
+      } else {
+        setShowTop(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
 
   if (loading) return <p className={styles.page}>Loading products...</p>;
 
@@ -79,7 +106,21 @@ export default function ProductsPage() {
           <option value="low">Price: Low → High</option>
           <option value="high">Price: High → Low</option>
         </select>
+
+        <button
+          className={styles.clearBtn}
+          onClick={handleClearFilters}
+        >
+          Clear Filters
+        </button>
+
       </div>
+
+      {filteredProducts.length === 0 && (
+        <div className={styles.empty}>
+          <p>No products found 😕</p>
+        </div>
+      )}
 
       {/* PRODUCT GRID */}
       <div className={styles.grid}>
@@ -99,6 +140,16 @@ export default function ProductsPage() {
           </Link>
         ))}
       </div>
+
+      {showTop && (
+        <button
+          className={styles.scrollTop}
+          onClick={scrollToTop}
+        >
+          ↑ Top
+        </button>
+      )}
+
     </main>
   );
 }

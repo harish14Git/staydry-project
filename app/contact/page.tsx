@@ -8,9 +8,8 @@ export default function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-
   const [message, setMessage] = useState("");
-
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -38,7 +37,18 @@ export default function ContactPage() {
     }
   };
 
+  const handleReset = () => {
+    setName("");
+    setEmail("");
+    setPhone("");
+    setMessage("");
+  };
 
+  const isFormValid =
+    name.trim() &&
+    phone.trim() &&
+    message.trim() &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   return (
     <main className={styles.page}>
@@ -77,13 +87,22 @@ export default function ContactPage() {
           />
 
 
-          <button type="submit">Submit</button>
+          <div className={styles.buttons}>
+            <button type="submit" disabled={!isFormValid}>
+            Submit
+          </button>
+            
+            <button type="button" onClick={handleReset}>
+              Reset
+            </button>
+          </div>
+          
         </form>
       </section>
 
       {/* CTA */}
       <section className={styles.bottom}>
-        <h2>Still looking for answers good advice or just a real human to guide your through the process?</h2>
+        <h2 className={styles.CTAText}>Still looking for answers good advice or just a real human to guide your through the process?</h2>
         <button>Chat with us right here</button>
       </section>
     </main>

@@ -45,7 +45,7 @@ export default function Navbar() {
             <span>Search</span>
           </Link>
 
-          <Link href="/products" className="icon-btn">
+          <Link href="/cart" className="icon-btn">
             <CartIcon />
             <span>Cart</span>
           </Link>

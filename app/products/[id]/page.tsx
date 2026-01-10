@@ -10,6 +10,7 @@ interface Product {
   price: number;
   thumbnail: string;
   description: string;
+  stock: number;
 }
 
 export default function ProductDetailsPage() {
@@ -31,7 +32,10 @@ export default function ProductDetailsPage() {
   }, [id]);
 
   if (loading) return <p className={styles.page}>Loading product...</p>;
-  if (!product) return <p className={styles.page}>Product not found</p>;
+
+  if (!product) return <p>Product not found</p>;
+  const maxStock = product.stock;
+
 
   const handleAddToCart = () => {
     console.log("Added to cart:", {
@@ -62,18 +66,18 @@ export default function ProductDetailsPage() {
           <p className={styles.price}>₹ {product.price}</p>
 
           <div className={styles.qtyBox}>
-            <button
-              className={styles.qtyBtn}
-              onClick={() => quantity > 1 && setQuantity(quantity - 1)}
+            <button className={styles.qtyBtn}
+              onClick={() => setQuantity(quantity - 1)}
+              disabled={quantity === 1}
             >
               −
             </button>
 
             <span>{quantity}</span>
 
-            <button
-              className={styles.qtyBtn}
+            <button className={styles.qtyBtn}
               onClick={() => setQuantity(quantity + 1)}
+              disabled={quantity === maxStock}
             >
               +
             </button>

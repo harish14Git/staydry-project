@@ -92,19 +92,20 @@ const Footer = () => {
                 <li>Accessibility</li>
               </ul>
             </div>
-            
+
           </div>
 
           <div className={styles.socialRow}>
+
+            <pre className={styles.brandText}>
+              <strong className={styles.brand}>STAYDRY</strong>  <span className="ps-15">—————  Shop our brand and find your dry style.</span> 
+            </pre>
             <div className={styles.icons}>
               <Image src={facebook} alt="Facebook Icon" width={29} height={29} />
               <Image src={linkedin} alt="LinkedIn Icon" width={24} height={24} />
               <Image src={instagram} alt="Instagram Icon" width={24} height={24} />
             </div>
 
-            <p className={styles.brandText}>
-              <strong>STAYDRY</strong> — shop our brand and find your dry style.
-            </p>
           </div>
 
         </div>
