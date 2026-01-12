@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Navbar from "../../components/Navbar";
 import styles from "./ProductDetails.module.css";
+import { useCart } from "../../context/CartContext";
 
 interface Product {
   title: string;
@@ -16,10 +17,12 @@ interface Product {
 export default function ProductDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
+  const { addToCart } = useCart(); // ✅ MUST be here (top level)
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     fetch(`https://dummyjson.com/products/${id}`)
@@ -32,17 +35,25 @@ export default function ProductDetailsPage() {
   }, [id]);
 
   if (loading) return <p className={styles.page}>Loading product...</p>;
-
   if (!product) return <p>Product not found</p>;
+
   const maxStock = product.stock;
 
-
   const handleAddToCart = () => {
-    console.log("Added to cart:", {
-      productId: id,
+    addToCart({
+      id: Number(id),
       title: product.title,
-      quantity
+      price: product.price,
+      thumbnail: product.thumbnail,
+      quantity,
     });
+
+    setShowPopup(true);
+
+    // hide popup after 2 seconds
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 2000);
   };
 
   return (
@@ -54,20 +65,16 @@ export default function ProductDetailsPage() {
       </button>
 
       <div className={styles.container}>
-        <img
-          src={product.thumbnail}
-          alt={product.title}
-          className={styles.image}
-        />
+        <img src={product.thumbnail} alt={product.title} className={styles.image} />
 
         <div className={styles.info}>
-          <h1 className={styles.title}>{product.title}</h1>
-          <p className={styles.description}>{product.description}</p>
-          <p className={styles.price}>₹ {product.price}</p>
+          <h1>{product.title}</h1>
+          <p>{product.description}</p>
+          <p>₹ {product.price}</p>
 
           <div className={styles.qtyBox}>
-            <button className={styles.qtyBtn}
-              onClick={() => setQuantity(quantity - 1)}
+            <button
+              onClick={() => setQuantity(q => q - 1)}
               disabled={quantity === 1}
             >
               −
@@ -75,20 +82,25 @@ export default function ProductDetailsPage() {
 
             <span>{quantity}</span>
 
-            <button className={styles.qtyBtn}
-              onClick={() => setQuantity(quantity + 1)}
+            <button
+              onClick={() => setQuantity(q => q + 1)}
               disabled={quantity === maxStock}
             >
               +
             </button>
           </div>
 
-          <button
-            className={styles.cartBtn}
-            onClick={handleAddToCart}
-          >
+          {/* ✅ Add to Cart Button */}
+          <button className={styles.cartBtn} onClick={handleAddToCart}>
             Add to Cart
           </button>
+
+          {/* ✅ Popup */}
+          {showPopup && (
+            <div className={styles.cartPopup}>
+              ✅ Added to cart
+            </div>
+          )}
         </div>
       </div>
     </main>

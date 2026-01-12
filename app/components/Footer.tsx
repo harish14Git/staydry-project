@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import styles from "./Footer.module.css";
 import Footerlogo from "../../public/Assets/Footer-logo.jpeg";
@@ -7,6 +6,7 @@ import mail from "../../public/Assets/mail.png";
 import facebook from "../../public/Assets/facebook.png";
 import linkedin from "../../public/Assets/linkedin.png";
 import instagram from "../../public/Assets/instagram.png";
+
 const Footer = () => {
   return (
     <footer className={styles.footer}>
@@ -15,7 +15,6 @@ const Footer = () => {
 
         {/* LEFT COLUMN */}
         <div className={styles.left}>
-
           <div className={styles.contact}>
             <Image
               src={Footerlogo}
@@ -25,32 +24,21 @@ const Footer = () => {
             />
 
             {/* CALL ROW */}
-            <div className={styles.contactRow}>
-              <Image
-                src={call}
-                alt="Call Icon"
-                width={20}
-                height={20}
-              />
+            <a href="tel:8122884357" className={styles.contactRow}>
+              <Image src={call} alt="Call Icon" width={20} height={20} />
               <span className={styles.callText}>Call</span>
-            </div>
-            {/* MAIL COL */}
-            <div className={styles.mailRow}>
-              <Image
-                src={mail}
-                alt="Mail Icon"
-                width={20}
-                height={20}
-              />
+            </a>
+
+            {/* MAIL ROW */}
+            <a href="mailto:harish@ozzi.tech" className={styles.mailRow}>
+              <Image src={mail} alt="Mail Icon" width={20} height={20} />
               <span className={styles.mailText}>Send an Email</span>
+            </a>
+
+            <div className={styles.copy}>
+              <p>© Copyright 2025 Staydry</p>
+              <p>ABN 67167519039</p>
             </div>
-
-          </div>
-
-
-          <div className={styles.copy}>
-            <p>© Copyright 2025 Staydry</p>
-            <p>ABN 67167519039</p>
           </div>
         </div>
 
@@ -92,20 +80,19 @@ const Footer = () => {
                 <li>Accessibility</li>
               </ul>
             </div>
-
           </div>
 
+          {/* SOCIAL ROW */}
           <div className={styles.socialRow}>
-
-            <pre className={styles.brandText}>
-              <strong className={styles.brand}>STAYDRY</strong>  <span className="ps-15">—————  Shop our brand and find your dry style.</span> 
-            </pre>
+            <div className={styles.brandText}>
+              <strong className={styles.brand}>STAYDRY</strong>
+              <span> — Shop our brand and find your dry style.</span>
+            </div>
             <div className={styles.icons}>
               <Image src={facebook} alt="Facebook Icon" width={29} height={29} />
               <Image src={linkedin} alt="LinkedIn Icon" width={24} height={24} />
               <Image src={instagram} alt="Instagram Icon" width={24} height={24} />
             </div>
-
           </div>
 
         </div>

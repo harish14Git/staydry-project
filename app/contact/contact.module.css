@@ -74,3 +74,72 @@ button:disabled {
   margin-top: 10px;
   font-size: 1rem;
 }
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, #ff7a18, #ff4d00);
+  padding: 24px;
+  width: 360px;
+  border-radius: 12px;
+  box-shadow: 10px 20px 35px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Popup heading */
+.popup h3 {
+  color: #1b1919;
+  font-size: 21px;
+  margin-bottom: 7px;
+  font-weight: 800;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.popup p {
+  color: #fff;
+  font-size: 17px;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.closeButton {
+  margin-top: 12px;
+  align-self: center;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+
+  background-color: #ffffff;
+  color: #ff4d00;
+  border: none;
+}
+.closeButton:hover {
+  background-color: #6473d5;
+  transform: scale(1.09);
+}
+.required{
+  color:red;
+  font-size: 1.4rem;
+}
+.inputWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.tooltip {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #d93025;
+  background-color: #fdecea;
+  padding: 6px 10px;
+  border-radius: 6px;
+  width: fit-content;
+}
+

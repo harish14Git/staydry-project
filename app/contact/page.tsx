@@ -8,32 +8,54 @@ export default function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [date, setDate] = useState("");
   const [message, setMessage] = useState("");
-  
+
+
+  const [showPopup, setShowPopup] = useState(false);
+
+
+  const [submittedData, setSubmittedData] = useState<null | {
+    name: string;
+    email: string;
+    phone: string;
+  }>(null);
+
+  // VALIDATIONS
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  const isPhoneValid = phone.length === 10;
+  const isNameValid = /^[A-Za-z\s]+$/.test(name);
+
+
+  const isFormValid =
+    name.trim() !== "" &&
+    isNameValid &&
+    date.trim() !== "" &&
+    isEmailValid &&
+    isPhoneValid;
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!isFormValid) return;
+
     const response = await fetch("/api/contact", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name,
         email,
         phone,
+        date,
         message,
       }),
     });
 
     if (response.ok) {
-      alert("Thank you! Your message has been sent.");
-      setName("");
-      setEmail("");
-      setPhone("");
-      setMessage("");
-    } else {
-      alert("Something went wrong. Please try again.");
+      setSubmittedData({ name, email, phone });
+      setShowPopup(true);
+      handleReset();
     }
   };
 
@@ -41,21 +63,35 @@ export default function ContactPage() {
     setName("");
     setEmail("");
     setPhone("");
+    setDate("");
     setMessage("");
   };
 
-  const isFormValid =
-    name.trim() &&
-    phone.trim() &&
-    message.trim() &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
   return (
     <main className={styles.page}>
+
+      {/* SUCCESS POPUP */}
+      {showPopup && submittedData && (
+        <div className={styles.popup}>
+          <h3>✅ Message Sent Successfully</h3>
+          <p><strong>Name:</strong> {submittedData.name}</p>
+          <p><strong>Email:</strong> {submittedData.email}</p>
+          <p><strong>Phone:</strong> {submittedData.phone}</p>
+          <button
+            className={styles.closeButton}
+            onClick={() => setShowPopup(false)}
+          >
+            Close
+          </button>
+        </div>
+      )}
+
       {/* HEADER */}
       <section className={styles.header}>
         <h1 className={styles.title}>Customer Care</h1>
-        <h3 className={styles.question}>Have questions or curious about something in particular?</h3>
+        <h3 className={styles.question}>
+          Have questions or curious about something in particular?
+        </h3>
         <p className={styles.description}>
           We want to make your shopping experience as smooth as possible.
           If you have any questions, feel free to contact us.
@@ -73,37 +109,90 @@ export default function ContactPage() {
 
         {/* FORM */}
         <form onSubmit={handleSubmit} className={styles.form}>
-          <input placeholder="Name" value={name} onChange={e => setName(e.target.value)} required />
-          <input placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} required />
-          <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />Preffered date for callback
-          <input type="date" />
 
-          <textarea
-            placeholder="Comment"
-            rows={5}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+          <label>
+            Name <span className={styles.required}>*</span>
+          </label>
+
+          <div className={styles.inputWrapper}>
+            <input
+              value={name}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[A-Za-z\s]*$/.test(value)) {
+                  setName(value);
+                }
+              }}
+              required
+            />
+
+            {name && !isNameValid && (
+              <span className={styles.tooltip}>
+                Name should contain only letters
+              </span>
+            )}
+          </div>
+
+
+          <label>
+            Phone Number <span className={styles.required}>*</span>
+          </label>
+          <input
+            value={phone}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^\d{0,10}$/.test(value)) {
+                setPhone(value);
+              }
+            }}
+            required
+          />
+          {phone && phone.length !== 10 && (
+            <p className={styles.error}>Invalid phone number (must be 10 digits)</p>
+          )}
+
+          <label>
+            Email <span className={styles.required}>*</span>
+          </label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value.trim())}
+            required
+          />
+          {email && !isEmailValid && (
+            <p className={styles.error}>Invalid email address</p>
+          )}
+
+          <label>
+            Preferred date for callback <span className={styles.required}>*</span>
+          </label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             required
           />
 
+          {/* COMMENT OPTIONAL */}
+          <textarea
+            placeholder="Comment (optional)"
+            rows={5}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
 
           <div className={styles.buttons}>
             <button type="submit" disabled={!isFormValid}>
-            Submit
-          </button>
-            
+              Submit
+            </button>
+
             <button type="button" onClick={handleReset}>
               Reset
             </button>
           </div>
-          
-        </form>
-      </section>
 
-      {/* CTA */}
-      <section className={styles.bottom}>
-        <h2 className={styles.CTAText}>Still looking for answers good advice or just a real human to guide your through the process?</h2>
-        <button>Chat with us right here</button>
+        </form>
       </section>
     </main>
   );
