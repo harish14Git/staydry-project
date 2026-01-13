@@ -14,7 +14,6 @@ export interface CartItem {
 
 interface CartContextType {
   cart: CartItem[];
-  loading: boolean;
   addToCart: (item: CartItem) => void;
   increaseQty: (id: number) => void;
   decreaseQty: (id: number) => void;
@@ -29,31 +28,24 @@ const CartContext = createContext<CartContextType | null>(null);
 /* ---------------- PROVIDER ---------------- */
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  /* Load cart from localStorage (CLIENT ONLY) */
-  useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
-    }
-    setLoading(false);
-  }, []);
+  // ✅ Cart loaded safely on first render
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    if (typeof window === "undefined") return [];
+    const stored = localStorage.getItem("cart");
+    return stored ? JSON.parse(stored) : [];
+  });
 
-  /* Save cart to localStorage */
+  // ✅ Persist cart
   useEffect(() => {
-    if (!loading) {
-      localStorage.setItem("cart", JSON.stringify(cart));
-    }
-  }, [cart, loading]);
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   /* ---------------- ACTIONS ---------------- */
 
   const addToCart = (item: CartItem) => {
     setCart(prev => {
       const existing = prev.find(p => p.id === item.id);
-
       if (existing) {
         return prev.map(p =>
           p.id === item.id
@@ -61,7 +53,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             : p
         );
       }
-
       return [...prev, item];
     });
   };
@@ -69,9 +60,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const increaseQty = (id: number) => {
     setCart(prev =>
       prev.map(item =>
-        item.id === id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
   };
@@ -80,9 +69,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setCart(prev =>
       prev
         .map(item =>
-          item.id === id
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
         )
         .filter(item => item.quantity > 0)
     );
@@ -96,13 +83,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setCart([]);
   };
 
-  /* ---------------- PROVIDER ---------------- */
-
   return (
     <CartContext.Provider
       value={{
         cart,
-        loading,
         addToCart,
         increaseQty,
         decreaseQty,

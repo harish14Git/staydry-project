@@ -1,23 +1,22 @@
 "use client";
 
 import { useCart } from "@/app/context/CartContext";
+import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import styles from "./cart.module.css";
 import Image from "next/image";
-import emptycart from '@/public/Assets/empty-cart.png'
+import emptycart from "@/public/Assets/empty-cart.png";
 
 export default function CartPage() {
+  const router = useRouter();
+
   const {
     cart,
-    loading,
     increaseQty,
     decreaseQty,
     removeItem,
     clearCart,
   } = useCart();
-
-  if (loading) return <p className={styles.loading}>Loading cart...</p>;
 
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -39,7 +38,6 @@ export default function CartPage() {
           />
           <p className={styles.emptyCartText}>Your cart is empty 🛒</p>
         </div>
-
       ) : (
         <>
           <div className={styles.cartItems}>
@@ -74,13 +72,20 @@ export default function CartPage() {
 
           <div className={styles.summary}>
             <h2>Total: ₹ {totalPrice}</h2>
+
+            <button
+              className={styles.checkoutBtn}
+              onClick={() => router.push("/checkout")}
+            >
+              Proceed to Checkout
+            </button>
+
             <button className={styles.clearBtn} onClick={clearCart}>
               Clear Cart
             </button>
           </div>
         </>
       )}
-
     </main>
   );
 }

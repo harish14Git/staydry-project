@@ -24,8 +24,8 @@
 /* Grid layout */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 25px;
 }
 
 /* Product card */
@@ -131,6 +131,12 @@
 .clearBtn:active {
   background: #d5720f;
 }
+.topIcon {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+
 
 
 

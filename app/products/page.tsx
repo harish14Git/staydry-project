@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import styles from "./products.module.css";
+import Image from "next/image";
+import srollup from "@/public/Assets/back-to-top.png";
 
 interface Product {
   id: number;
@@ -140,15 +142,20 @@ export default function ProductsPage() {
           </Link>
         ))}
       </div>
+{showTop && (
+  <button
+    className={styles.scrollTop}
+    onClick={scrollToTop}
+  >
+    <Image
+      src={srollup}
+      alt="Scroll to top"
+      width={50}
+      height={50}
+    />
+  </button>
+)}
 
-      {showTop && (
-        <button
-          className={styles.scrollTop}
-          onClick={scrollToTop}
-        >
-          ↑ Top
-        </button>
-      )}
 
     </main>
   );
