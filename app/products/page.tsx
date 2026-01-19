@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Navbar from "../components/Navbar";
-import styles from "./products.module.css";
+import styles from "@/src/styles/products.module.css";
 import Image from "next/image";
 import srollup from "@/public/Assets/back-to-top.png";
 
@@ -78,7 +77,6 @@ export default function ProductsPage() {
 
   return (
     <main className={styles.page}>
-      <Navbar />
 
       {/* CONTROLS */}
       <div className={styles.controls}>
@@ -155,7 +153,6 @@ export default function ProductsPage() {
     />
   </button>
 )}
-
 
     </main>
   );

@@ -1,0 +1,65 @@
+.hero {
+  min-height: 80vh;
+  background-image: url("https://images.unsplash.com/photo-1505693416388-ac5ce068fe85");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+}
+
+.overlay {
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.45);
+  color: #fff;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 5%;
+  max-width: 40%;
+}
+
+.title {
+  font-weight: 800;
+  margin-bottom: 1rem;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  max-width: 90%;
+}
+
+.button {
+  background-color: #ff6a00;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  width: fit-content;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+
+.button:hover {
+  background-color: #e85d00;
+}
+
+.secondaryButton {
+  background-color: #555;
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    max-width: 100%;
+    padding: 8%;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+}

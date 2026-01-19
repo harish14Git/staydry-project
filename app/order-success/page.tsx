@@ -2,9 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useCart } from "@/app/context/CartContext";
-import Navbar from "../components/Navbar";
-import styles from "./order-success.module.css";
+import { useCart } from "@/src/context/CartContext";
+import styles from "@/src/styles/order-success.module.css";
 
 export default function OrderSuccessPage() {
   const router = useRouter();
@@ -18,12 +17,10 @@ export default function OrderSuccessPage() {
       clearCart();
       clearedRef.current = true;
     }
-  }, []);
+  }, [clearCart]);
 
   return (
     <main className={styles.page}>
-      <Navbar />
-
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.icon}>🎉</div>

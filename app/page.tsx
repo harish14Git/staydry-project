@@ -1,13 +1,14 @@
 import Link from "next/link";
 import React from "react";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import styles from "./Home.module.css";
+import Navbar from "@/src/components/Navbar";
+import { useCart } from "@/src/context/CartContext";
+import Footer from "@/src/components/Footer";
+import styles from "@/src/styles/Home.module.css";
 
 export default function HomePage() {
   return (
     <main>
-      <Navbar />
+    
 
       {/* Hero Section */}
       <section className={styles.hero}>

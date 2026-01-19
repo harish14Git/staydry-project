@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Navbar from "../../components/Navbar";
-import styles from "./ProductDetails.module.css";
-import { useCart } from "../../context/CartContext";
+import Navbar from "@/src/components/Navbar";
+import styles from "@/src/styles/ProductDetails.module.css";
+import { useCart } from "@/src/context/CartContext";
 
 interface Product {
   title: string;
@@ -58,7 +58,6 @@ export default function ProductDetailsPage() {
 
   return (
     <main className={styles.page}>
-      <Navbar />
 
       <button onClick={() => router.back()} className={styles.backBtn}>
         ← Back

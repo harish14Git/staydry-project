@@ -1,9 +1,9 @@
 "use client";
 
-import { useCart } from "@/app/context/CartContext";
+import { useCart } from "@/src/context/CartContext";
 import { useRouter } from "next/navigation";
-import Navbar from "../components/Navbar";
-import styles from "./checkout.module.css";
+import Navbar from "@/src/components/Navbar";
+import styles from "@/src/styles/checkout.module.css";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -30,8 +30,6 @@ export default function CheckoutPage() {
 
   return (
     <main className={styles.page}>
-      <Navbar />
-
       <h1 className={styles.title}>Checkout</h1>
 
       <div className={styles.container}>

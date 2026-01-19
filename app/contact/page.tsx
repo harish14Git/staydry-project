@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import styles from "./contact.module.css";
+import styles from "@/src/styles/contact.module.css";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
