@@ -1,143 +1,121 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
-import logo from "../../public/Assets/my-logo-img.png";
-import call from "../../public/Assets/phone-call.png";
-import { Style_Script } from "next/font/google";
+import styles from "@/src/styles/Navbar.module.css";
+import call from "@/public/Assets/svg-image-4.svg"
 
+import logoBlack from "@/public/Assets/Staydry.svg";
+import logoKids from "@/public/Assets/Staydry Kids.svg";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="w-full bg-white shadow-md z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-
-        {/* LEFT: LOGO */}
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
-            <Image src={logo} alt="Logo" width={45} height={45} priority />
-            <h1 className="text-2xl font-bold text-orange-500 tracking-wide">
-              STAYDRY
-            </h1>
+    <header className={styles.navbar}>
+      {/* ───── TOP STRIP ───── */}
+      <div className={styles.topStrip}>
+        {/* LEFT: LOGOS */}
+        <div className={styles.brandRow}>
+          <Link href="/" className={styles.brandLeft}>
+            <Image src={logoBlack} alt="Staydry" width={110} height={32} />
           </Link>
+
+          <div className={styles.brandKids}>
+            <Image src={logoKids} alt="Staydry Kids" width={120} height={36} />
+          </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="flex items-center gap-6">
-
-          {/* SEARCH */}
-          <Link href="/products" className="flex items-center gap-1">
+        {/* RIGHT: ICONS */}
+        <div className={styles.actions}>
+          <Link href="/products" className={styles.iconBtn}>
             <SearchIcon />
-            <span className="hidden sm:inline">Search</span>
           </Link>
 
-          {/* CART */}
-          <Link href="/cart" className="flex items-center gap-1">
+          <span className={styles.divider} />
+          <Link href="/contact" className={styles.actionItem}>
+            <Image
+              src={call}
+              alt="Call"
+              width={20}
+              height={20}
+              className={styles.icon}
+              priority
+            />
+          </Link>
+
+
+          <span className={styles.divider} />
+
+          <Link href="/cart" className={styles.iconBtn}>
             <CartIcon />
-            <span className="hidden sm:inline">Cart</span>
+            <span className={styles.iconText}>Cart</span>
           </Link>
 
-          {/* CONTACT */}
-          <Link href="/contact" className="flex items-center gap-2">
-            <Image src={call} alt="Call Icon" width={22} height={22} />
-            <span className="font-semibold hidden sm:inline">Contact</span>
-          </Link>
-
-          {/* MENU BUTTON */}
           <button
+            className={styles.menuBtn}
             onClick={() => setOpen(!open)}
-            className="flex items-center gap-2"
             aria-label="Menu"
           >
-            <div className="flex flex-col w-6 h-5 justify-between">
-              <span className="h-0.5 bg-gray-800 rounded"></span>
-              <span className="h-0.5 bg-gray-800 rounded"></span>
-              <span className="h-0.5 bg-gray-800 rounded"></span>
-            </div>
-            <span className="text-sm font-medium">Menu</span>
+            <MenuIcon />
           </button>
         </div>
       </div>
+<span className={styles.hrstyle}><hr></hr></span>
+      {/* ───── DESKTOP NAV LINKS ───── */}
+      <nav className={styles.mainNav}>
+        <Link href="/products">Shop All</Link>
+        <Link href="/products#underwear">
+          Underwear
+        </Link>
+        <Link href="/products#bedding">Bedding & Home</Link>
+        <Link href="/products#bundles">Bundles</Link>
+        <Link href="/products#mobility">Mobility</Link>
+      </nav>
 
-      {/* MOBILE / MENU DROPDOWN */}
+      {/* ───── MOBILE MENU ───── */}
       {open && (
-        <nav className="bg-white shadow-lg">
-          <ul className="flex flex-col gap-4 px-6 py-6 text-center font-medium">
-
-            <li className="text-gray-700 hover:text-orange-500 font-medium">
-              <Link href="/products" onClick={() => setOpen(false)}>
-                Shop All
-              </Link>
-            </li>
-            <li className="text-gray-700 hover:text-orange-500 font-medium">
-              <Link href="/products#underwear" onClick={() => setOpen(false)}>
-                Underwear
-              </Link>
-            </li>
-            <li className="text-gray-700 hover:text-orange-500 font-medium">
-              <Link href="/products#bedding" onClick={() => setOpen(false)}>
-                Bedding & Home
-              </Link>
-            </li>
-            <li className="text-gray-700 hover:text-orange-500 font-medium">
-              <Link href="/products#mobility" onClick={() => setOpen(false)}>
-                Mobility
-              </Link>
-            </li>
-            <li className="text-gray-700 hover:text-orange-500 font-medium">
-              <Link href="/products#training" onClick={() => setOpen(false)}>
-                Toilet Training
-              </Link>
-            </li>
-            <li className="text-gray-700 hover:text-orange-500 font-medium">
-              <Link href="/products#bundles" onClick={() => setOpen(false)}>
-                Bundles
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <div className={styles.mobileMenu}>
+          <Link href="/products" onClick={() => setOpen(false)}>Shop All</Link>
+          <Link href="/products#underwear" onClick={() => setOpen(false)}>Underwear</Link>
+          <Link href="/products#bedding" onClick={() => setOpen(false)}>Bedding & Home</Link>
+          <Link href="/products#bundles" onClick={() => setOpen(false)}>Bundles</Link>
+          <Link href="/products#mobility" onClick={() => setOpen(false)}>Mobility</Link>
+        </div>
       )}
     </header>
   );
 }
 
-/* ---------------- ICONS ---------------- */
+/* ───── SVG ICONS ───── */
 
 function SearchIcon() {
   return (
-    <svg
-      className="w-6 h-6"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="m21 21-4.35-4.35M17 11a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z"
-      />
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="11" cy="11" r="7" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
     </svg>
   );
 }
 
 function CartIcon() {
   return (
-    <svg
-      className="w-6 h-6"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M2.25 3h1.386L5.82 7.5m0 0L7.5 15.75h9.75L19.5 7.5H5.82z"
-      />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M6 6h15l-1.5 9h-12z" />
+      <circle cx="9" cy="20" r="1" />
+      <circle cx="18" cy="20" r="1" />
+    </svg>
+  );
+}
+
+
+function MenuIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="18" x2="21" y2="18" />
     </svg>
   );
 }

@@ -1,0 +1,178 @@
+.features {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 48px;
+  border-bottom: 1px solid #eee;
+}
+
+.left span {
+  margin-right: 24px;
+  font-weight: 500;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.right strong {
+  color: #d9480f;
+}
+
+.right button {
+  background: #d9480f;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* SHOP SECTION */
+
+.shop {
+  padding: 48px;
+}
+
+.label {
+  color: #d9480f;
+  margin-bottom: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.fav {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 22px;
+  color: white;
+}
+
+.cta {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #d9480f;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  font-weight: 600;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .features {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.featureWrapper {
+  padding: 32px 48px 0;
+}
+
+.featureBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.featureLeft {
+  display: flex;
+  gap: 32px;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: #111;
+}
+
+.featureRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: right;
+}
+
+.featureRight strong {
+  font-weight: 600;
+}
+
+.featureRight button {
+  background: #d9480f;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.divider {
+  margin-top: 32px;
+  height: 1px;
+  background: #111;
+  opacity: 0.2;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .featureBar {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .featureRight {
+    flex-direction: column;
+  }
+}
+.aboutSection {
+  padding: 80px 48px;
+}
+
+.aboutContainer {
+  max-width: 900px;
+}
+
+.aboutText {
+  font-size: 36px;
+  line-height: 1.3;
+  font-weight: 500;
+  color: #007c85;
+}
+

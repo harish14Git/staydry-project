@@ -1,5 +1,31 @@
+/* ─────────────────────────────────────────────
+   Tailwind base imports (DO NOT CHANGE ORDER)
+───────────────────────────────────────────── */
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* ─────────────────────────────────────────────
+   Global Reset & Overflow Fix (VERY IMPORTANT)
+───────────────────────────────────────────── */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden; 
+}
+
+/* Safe global box sizing (allowed in globals.css) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ─────────────────────────────────────────────
+   Theme variables
+───────────────────────────────────────────── */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -12,6 +38,9 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* ─────────────────────────────────────────────
+   Dark mode
+───────────────────────────────────────────── */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -19,11 +48,9 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+/* ─────────────────────────────────────────────
+   Footer styles
+───────────────────────────────────────────── */
 .footer {
   background: #f6f1ee;
   padding: 40px;
@@ -39,6 +66,7 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 20px;
+  flex-wrap: wrap; 
 }
 
 .submit-btn {
@@ -54,6 +82,7 @@ body {
   display: flex;
   gap: 80px;
   margin-top: 40px;
+  flex-wrap: wrap; 
 }
 
 .footer-links h4 {
@@ -75,9 +104,31 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap; 
+  gap: 16px;
 }
 
 .brand {
   font-weight: bold;
 }
 
+/* ─────────────────────────────────────────────
+   Typography utilities (Tailwind layer)
+───────────────────────────────────────────── */
+@layer components {
+  .h1 {
+    @apply font-sans font-bold text-4xl md:text-5xl leading-tight;
+  }
+  .h2 {
+    @apply font-sans font-semibold text-2xl md:text-3xl;
+  }
+  .h3 {
+    @apply font-sans font-medium text-xl md:text-2xl;
+  }
+  .body {
+    @apply font-sans font-normal text-base md:text-lg leading-relaxed;
+  }
+  .nav-text {
+    @apply font-sans font-semibold text-sm md:text-base tracking-wide uppercase;
+  }
+}

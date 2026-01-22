@@ -148,8 +148,8 @@ export default function ProductsPage() {
     <Image
       src={srollup}
       alt="Scroll to top"
-      width={50}
-      height={50}
+      width={40}
+      height={40}
     />
   </button>
 )}

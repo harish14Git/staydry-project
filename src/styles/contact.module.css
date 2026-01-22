@@ -7,36 +7,55 @@
 .header {
   margin-bottom: 40px;
 }
+
 .title {
   color: #ff4d00;
   font-size: 1.7rem;
   font-weight: bold;
 }
+
 .description {
   max-width: 700px;
   color: blue;
   line-height: 1.6;
 }
+
+.question {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ff4d00;
+}
+
 .content {
   display: flex;
   gap: 80px;
   border-top: 1px solid #ddd;
   padding-top: 40px;
 }
+
 .left {
   width: 35%;
 }
+
 .contactItem {
   display: flex;
   gap: 15px;
   margin-bottom: 30px;
 }
+
+.contactItem img {
+  width: 40px;
+  height: auto; /* ✅ keeps aspect ratio */
+  object-fit: contain;
+}
+
 .form {
   width: 65%;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
+
 .form button {
   width: 120px;
   background: #ff4d00;
@@ -44,11 +63,23 @@
   border: none;
   padding: 8px;
   cursor: pointer;
-  border-radius: 30px; 
+  border-radius: 30px;
 }
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .bottom {
   margin-top: 80px;
 }
+
 .bottom button {
   margin-top: 15px;
   padding: 10px 20px;
@@ -57,23 +88,12 @@
   cursor: pointer;
   border-radius: 30px;
 }
-.question{
-  font-size: 1.rem;
-  font-weight: 500;
-  color:#ff4d00;
-}
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.buttons {
-  display: flex;
-  gap: 10px;
-}
-.CTAText{
+
+.CTAText {
   margin-top: 10px;
   font-size: 1rem;
 }
+
 .popup {
   position: fixed;
   top: 50%;
@@ -91,7 +111,6 @@ button:disabled {
   gap: 12px;
 }
 
-/* Popup heading */
 .popup h3 {
   color: #1b1919;
   font-size: 21px;
@@ -106,6 +125,7 @@ button:disabled {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
 .closeButton {
   margin-top: 12px;
   align-self: center;
@@ -114,19 +134,21 @@ button:disabled {
   padding: 8px 16px;
   border-radius: 20px;
   cursor: pointer;
-
   background-color: #ffffff;
   color: #ff4d00;
   border: none;
 }
+
 .closeButton:hover {
   background-color: #6473d5;
   transform: scale(1.09);
 }
-.required{
-  color:red;
+
+.required {
+  color: red;
   font-size: 1.4rem;
 }
+
 .inputWrapper {
   position: relative;
   display: flex;
@@ -143,3 +165,28 @@ button:disabled {
   width: fit-content;
 }
 
+/* ✅ Responsive Fix */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column; /* stack vertically */
+    gap: 40px;
+  }
+
+  .left,
+  .form {
+    width: 100%; /* full width on mobile */
+  }
+
+  .contactItem img {
+    width: 36px; /* slightly smaller on mobile */
+    height: auto;
+  }
+}
+
+/* ✅ Extra polish for very wide screens */
+@media (min-width: 1200px) {
+  .form input,
+  .form textarea {
+    max-width: 600px; /* prevent stretching edge-to-edge */
+  }
+}

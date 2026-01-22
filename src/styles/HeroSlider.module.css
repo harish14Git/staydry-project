@@ -1,0 +1,94 @@
+.hero {
+  width: 100%;
+}
+
+.slide {
+  position: relative;
+  height: 90vh;
+}
+
+.background {
+  object-fit: cover;
+}
+
+/* Light overlay like Staydry */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 6%;
+  color: #fff;
+}
+
+/* Text block */
+.textBlock {
+  max-width: 520px;
+}
+
+.title {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+/* Orange pill button */
+.cta {
+  display: inline-block;
+  background: #f15a22;
+  color: #fff;
+  padding: 0.9rem 2.5rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.cta:hover {
+  background: #d94f1f;
+  transform: translateY(-2px);
+}
+
+/* Bottom categories */
+.categories {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.categories span {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.categories span:hover {
+  text-decoration: underline;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .slide {
+    height: 70vh;
+  }
+
+  .overlay {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}

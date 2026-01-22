@@ -5,6 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import Navbar from "@/src/components/Navbar";
 import styles from "@/src/styles/ProductDetails.module.css";
 import { useCart } from "@/src/context/CartContext";
+import Image from "next/image";
+import back from "@/public/Assets/back-button.png";
 
 interface Product {
   title: string;
@@ -17,7 +19,7 @@ interface Product {
 export default function ProductDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
-  const { addToCart } = useCart(); // ✅ MUST be here (top level)
+  const { addToCart } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -58,12 +60,18 @@ export default function ProductDetailsPage() {
 
   return (
     <main className={styles.page}>
-
+      {/* ✅ Back button with Next.js Image */}
       <button onClick={() => router.back()} className={styles.backBtn}>
-        ← Back
+        <Image
+          src={back}
+          alt="Move to back"
+          width={30}
+          height={30}
+        />
       </button>
 
       <div className={styles.container}>
+        {/* ✅ Product thumbnail (can stay as <img> or switch to <Image /> for optimization) */}
         <img src={product.thumbnail} alt={product.title} className={styles.image} />
 
         <div className={styles.info}>
