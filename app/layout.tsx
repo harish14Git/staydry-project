@@ -1,23 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist, Geist_Mono } from "next/font/google";
 import Footer from "@/src/components/Footer";
-import Navbar from "@/src/components/Navbar"; // <-- FIXED
+import Navbar from "@/src/components/Navbar";
 import { CartProvider } from "@/src/context/CartContext";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import { Inter } from "next/font/google"; 
-const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+});
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
   subsets: ["latin"],
+  variable: "--font-geist-sans",
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -33,12 +37,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
         <CartProvider>
-          <Navbar /> {/* Now works */}
-          <main>{children}</main>
+  
+            <Navbar />
+            <main className="py-6 md:py-12 ">{children}</main>
           <Footer />
+         
         </CartProvider>
       </body>
     </html>

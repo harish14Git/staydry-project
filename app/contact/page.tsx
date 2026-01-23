@@ -68,7 +68,7 @@ export default function ContactPage() {
   };
 
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page}  mx-auto px-4 md:px-8`}>
 
       {/* SUCCESS POPUP */}
       {showPopup && submittedData && (

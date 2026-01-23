@@ -64,7 +64,7 @@ export default function HeroSlider() {
       <Slider {...settings}>
         {slides.map((slide, index) => (
           <div key={index}>
-            <div className="relative w-full h-[90vh] overflow-hidden">
+            <div className="relative w-full h-[90vh] md:h-[90vh] overflow-hidden">
               {/* MEDIA */}
               {slide.type === "image" ? (
                 <Image
@@ -72,7 +72,6 @@ export default function HeroSlider() {
                   alt={slide.title}
                   fill
                   priority={index === 0}
-                  unoptimized
                   className="object-cover"
                 />
               ) : (
@@ -87,60 +86,65 @@ export default function HeroSlider() {
                 </video>
               )}
 
-              {/* OVERLAY */}
-              <div className="absolute inset-0 bg-black/40" />
+              {/* OVERLAY (lighter on mobile) */}
+              <div className="absolute inset-0 bg-black/10 md:bg-black/25  mx-auto px-4 md:px-8" />
 
-              {/* CONTENT */}
-              <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-24 text-white">
-                <div className="max-w-2xl">
-                  {/* BIG HEADING */}
-                  <h1 className="text-[36px] md:text-[58px] font-extrabold leading-tight mb-4">
+              {/* BIG HEADING — centered on mobile, lower on desktop */}
+              <div className="absolute inset-0 flex items-center justify-center md:block text-white">
+                <div className="px-4 sm:px-6 md:px-0 md:max-w-4xl md:absolute md:top-52 md:left-24">
+                  <h1 className="text-[28px] sm:text-[36px] md:text-[72px] font-extrabold leading-tight text-center md:text-left">
                     {slide.title}
                   </h1>
-
-                  {/* STAGGERED SUBTITLE */}
-                  <div className="mt-16 md:mt-24 text-center">
-                  <p className="ml-6 md:ml-10 text-[16px] md:text-[18px] font-medium mb-6">
-                    {slide.subtitle}
-                  </p>
-
-                  {/* BUTTON ALIGNED WITH SUBTITLE */}
-                  <div className="ml-6 md:ml-20">
-                    <Link
-                      href={slide.link}
-                      className="inline-block bg-orange-600 hover:bg-orange-700 transition px-8 py-3 rounded-full font-semibold text-sm md:text-base"
-                    >
-                      {slide.button}
-                    </Link>
-                    </div>
-                  </div>
                 </div>
               </div>
 
-              {/* CATEGORY STRIP */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-6 md:gap-16 px-4 w-full md:w-auto justify-center">
+              {/* SUBTITLE + CTA */}
+              <div className="absolute bottom-24 md:bottom-14 left-1/2 md:left-[24%] -translate-x-1/2 md:-translate-x-0 w-[90%] md:w-auto max-w-md text-white text-left">
+                <p className="text-[14px] md:text-[17px] font-medium mb-4">
+                  {slide.subtitle}
+                </p>
 
+                <Link
+                  href={slide.link}
+                  className="inline-block bg-orange-600 hover:bg-orange-700 transition px-8 py-3 rounded-full font-semibold text-sm"
+                >
+                  {slide.button}
+                </Link>
+              </div>
+
+              {/* MOBILE CATEGORY STRIP */}
+              <div className="md:hidden absolute bottom-6 left-1/2 -translate-x-1/2 w-[92%] flex justify-between text-white text-[13px]">
                 {slides.map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex flex-col items-center text-sm font-semibold"
-                  >
-                    {/* DIVIDER */}
-                    <div
-                      className={`h-[2px] w-20 mb-2 transition-all ${
-                        activeSlide === i
-                          ? "bg-white"
-                          : "bg-white/40"
+                  <div key={i} className="flex flex-col items-center gap-1">
+                    <span
+                      className={`h-[1px] w-12 ${
+                        activeSlide === i ? "bg-white" : "bg-white/40"
                       }`}
                     />
-
-                    {/* TEXT */}
                     <span
-                      className={`transition ${
-                        activeSlide === i
-                          ? "text-white"
-                          : "text-white/60"
+                      className={
+                        activeSlide === i ? "text-white" : "text-white/70"
+                      }
+                    >
+                      {item.category}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* DESKTOP CATEGORY STRIP */}
+              <div className="hidden md:flex absolute bottom-10 right-24 gap-10 text-white">
+                {slides.map((item, i) => (
+                  <div key={i} className="flex flex-col gap-2 text-sm">
+                    <span
+                      className={`h-[1px] w-24 ${
+                        activeSlide === i ? "bg-white" : "bg-white/40"
                       }`}
+                    />
+                    <span
+                      className={
+                        activeSlide === i ? "text-white" : "text-white/60"
+                      }
                     >
                       {item.category}
                     </span>

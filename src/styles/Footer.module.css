@@ -1,23 +1,23 @@
 .footer {
   background: #f6f1ee;
-  padding: 3.5rem 1.5rem;
-  font-size: 0.9rem;
+  font-size: 14px;
+  padding: 20px;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
+
+
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 1rem;
 }
 
-.wrapper {
-  display: flex;
-  justify-content: space-between;
-  gap: 4rem;
-  flex-wrap: wrap;
-}
 
-.left {
-  flex: 0 0 240px;
+
+
+.contactBlock {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
@@ -28,154 +28,188 @@
   align-items: center;
   gap: 0.6rem;
   font-weight: 600;
-  color: #333;
 }
 
-.copy {
-  margin-top: 2.5rem;
-  font-size: 0.75rem;
-  color: #555;
-}
 
-.right {
-  flex: 1;
-  min-width: 300px;
-}
 
-.newsletter {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 1.5rem;
-}
+
+
 
 .inputWrapper {
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
 }
 
 .newsInput {
-  flex: 1;
+  width: 100%;
   border: none;
-  border-bottom: 1px solid #666;
+  border-bottom: 1px solid #707070;
   background: transparent;
-  padding: 0.6rem 0;
-  font-size: 1rem;
+  padding: 0.8rem 0;
+  font-size: 16px;
   outline: none;
 }
 
-.floatingLabel {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #777;
-  pointer-events: none;
-  transition: 0.25s;
-}
-
-.active,
-.newsInput:focus + .floatingLabel {
-  top: -8px;
-  font-size: 0.75rem;
-  color: #e4572e;
-}
 
 .button {
+  position: absolute;
+  right: 0;
+  top: 5%;
+
   background: #e4572e;
   color: #fff;
   border: none;
-  padding: 0.4rem 1.2rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  padding: 10px 28px; 
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
 }
 
+
 .checkbox {
-  margin-top: 0.8rem;
-  font-size: 0.8rem;
+  margin-top: 1.2rem;
   display: flex;
-  gap: 0.5rem;
+  gap: 0.7rem;
+  font-size: 14px;
+  color: #555;
 }
+
 
 .checkbox strong {
   text-decoration: underline;
-  cursor: pointer;
 }
 
-.links {
+
+.linkGroups {
   display: flex;
+  /* justify-content: center; */
   gap: 4rem;
-  margin-top: 2rem;
 }
 
-.links h5 {
-  font-size: 0.85rem;
-  margin-bottom: 0.7rem;
-}
-
-.links li {
+.linkGroups ul {
   list-style: none;
-  margin-bottom: 0.45rem;
-  font-size: 0.85rem;
-  color: #555;
-  cursor: pointer;
-}
-
-.links li:hover {
-  text-decoration: underline;
-}
-
-.socialRow {
+  padding: 0;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 3rem;
+  flex-direction: column;
+  gap: 0.6rem;
+  color: #555;
 }
 
-.brand {
+.footerbrand strong {
   font-weight: 900;
-  font-size: 1.2rem;
 }
 
-.brandText {
-  font-size: 0.85rem;
+.line {
+  width: 32px;
+  height: 1px;
+  background: #000;
+}
+
+.tagline {
+  font-size: 14px;
   color: #444;
 }
 
-.icons {
+
+
+
+.footerbrand {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  white-space: nowrap;
+  grid-column: 2;
+  grid-row: 5/6;
+}
+
+
+
+
+.socialRight {
+  display: flex;
+  justify-content: flex-end;
   gap: 0.9rem;
+  grid-column: 3;
+  grid-row: 5/6;
+
+}
+.newsletter{
+  grid-column: 2/span 2;
+  grid-row:1/span 2;
+}
+.logo{
+  grid-column: 1;
+  grid-row: 1;
+}
+.contactBlock{
+  grid-column:1 ;
+  grid-row: 2/3;
+}
+.botline{
+  grid-column: 1;
+  grid-row: 4/5;
+}
+.linkGroups{
+  grid-column: 2;
+  grid-row: 3/span 2 ;
 }
 
-.iconBox {
-  position: relative;
-  width: 22px;
-  height: 22px;
-}
 
-.message {
-  margin-top: 0.6rem;
-  font-size: 0.8rem;
-}
-
-.success {
-  color: green;
-}
-
-.error {
-  color: red;
-}
-
-/* MOBILE */
 @media (max-width: 768px) {
-  .wrapper {
-    flex-direction: column;
+  .footerInner {
+    padding: 2rem 1.5rem;
+  }
+ .newsletter {
+  
+  grid-column: 1/-1;
+  grid-row:2/3;
+}
+  .footerGrid {
+    grid-template-columns: 1fr  1fr ;
+    grid-template-rows: auto;
+    gap: 1rem;
   }
 
-  .socialRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+ 
+.logo{
+  
+  grid-column: 1/-1;
+  grid-row:1/2;
+}
+.contactBlock{
+  
+  grid-column:1;
+  grid-row: 3/4;
+}
+
+
+  .linkGroups {
+
+    
+    grid-column:2;
+    grid-row:3/span 2;
+    
+  }
+  .botline{
+    grid-column: 1;
+    grid-row: 6/7;
+  }
+
+  
+  .footerbrand {
+    grid-column: 1/-1;
+    grid-row: 5/6;
+    font-size: 18px;
+  }
+  .socialRight{
+    grid-column: 2;
+    grid-row: 6/7;
+  }
+
+ 
+    .button {
+    top: 2% ; 
+ 
   }
 }

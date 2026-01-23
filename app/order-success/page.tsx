@@ -20,7 +20,7 @@ export default function OrderSuccessPage() {
   }, [clearCart]);
 
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page}  mx-auto px-4 md:px-8`}>
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.icon}>🎉</div>

@@ -59,7 +59,7 @@ export default function ProductDetailsPage() {
   };
 
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page}  mx-auto px-4 md:px-8`}>
       {/* ✅ Back button with Next.js Image */}
       <button onClick={() => router.back()} className={styles.backBtn}>
         <Image

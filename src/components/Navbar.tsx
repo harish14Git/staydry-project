@@ -13,7 +13,8 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className={styles.navbar}>
+    <header className={`${styles.navbar}  mx-auto px-4 md:px-8`}>
+    
       {/* ───── TOP STRIP ───── */}
       <div className={styles.topStrip}>
         {/* LEFT: LOGOS */}
