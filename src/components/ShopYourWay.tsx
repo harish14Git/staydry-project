@@ -37,7 +37,7 @@ export default function ShopYourWay() {
               <Image
                 src={item.image}
                 alt={item.title}
-                width={300}   // Set width and height instead of `fill` for better layout
+                width={300}   
                 height={200}
                 className={styles.image}
               />
