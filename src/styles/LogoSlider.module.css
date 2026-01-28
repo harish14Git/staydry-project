@@ -1,9 +1,8 @@
 .logoSection {
-  padding: 12px 0 0; /* reduced top gap */
+  padding: 12px 0 0; 
   overflow: hidden;
 }
 
-/* NEW: width constraint like the reference image */
 .container {
   max-width: 1100px;
   margin: 0 auto;
@@ -11,14 +10,13 @@
 }
 
 .slider {
-  width: 100%;
+  width: 100%; 
   overflow: hidden;
 }
-
 .track {
   display: flex;
   width: max-content;
-  animation: scroll 30s linear infinite;
+  animation: scroll 10s linear infinite;
 }
 
 .logo {

@@ -86,65 +86,28 @@ export default function HeroSlider() {
                 </video>
               )}
 
-              {/* OVERLAY (lighter on mobile) */}
+              {/* OVERLAY */}
               <div className="absolute inset-0 bg-black/10 md:bg-black/25  mx-auto px-4 md:px-8" />
 
               {/* BIG HEADING */}
               <div className="absolute inset-0 text-white pointer-events-none">
-                <div
-                  className="
-      absolute
-      left-[12px] md:left-[6%]
-      top-[56%]
-      -translate-y-1/2
-      max-w-4xl
-    "
-                >
-                  <h1
-                    className="
-        font-extrabold leading-[1.05]
-        text-[clamp(2.2rem,6vw,4.8rem)]
-      "
-                  >
+                <div className="absolute left-[12px] md:left-[6%] top-[56%] -translate-y-1/2 max-w-4xl">
+                  <h1 className=" font-extrabold leading-[1.05] text-[clamp(2.2rem,6vw,4.8rem)] ">
                     {slide.title}
                   </h1>
                 </div>
               </div>
 
               {/* SUBTITLE + CTA */}
-              <div
-                className="
-    absolute
-    left-[12px]
-    bottom-28
-
-    md:left-auto
-    md:right-[32%]
-    md:bottom-16   /* ⬅ moved a little DOWN */
-    md:max-w-[360px]
-
-    max-w-md
-    text-white
-  "
-              >
-                <p
-                  className="
-      mb-6 leading-relaxed
-      text-[clamp(1.15rem,5.5vw,1.1rem)]
-      md:text-[15px]
-    "
-                >
+              <div className=" absolute left-[12px] bottom-28 md:left-auto md:right-[32%] md:bottom-16 md:max-w-[360px] max-w-md text-white">
+                <p className=" mb-10 leading-relaxed text-[clamp(1.15rem,5.5vw,1.1rem)] md:text-[15px] ">
                   {slide.subtitle}
                 </p>
 
                 <Link
                   href={slide.link}
-                  className="
-      inline-flex items-center justify-center
-      rounded-full font-semibold
-      bg-orange-600 hover:bg-orange-700 transition
-      px-8 py-4
-      md:px-6 md:py-3
+                  className=" inline-flex items-center justify-center rounded-full font-semibold bg-orange-600 hover:bg-orange-700 transition px-10 py-4
+ md:px-6 md:py-3
       text-[clamp(0.95rem,4.5vw,1rem)]
     "
                 >

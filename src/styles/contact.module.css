@@ -45,7 +45,7 @@
 
 .contactItem img {
   width: 40px;
-  height: auto; /* ✅ keeps aspect ratio */
+  height: auto;
   object-fit: contain;
 }
 
@@ -165,28 +165,26 @@ button:disabled {
   width: fit-content;
 }
 
-/* ✅ Responsive Fix */
 @media (max-width: 768px) {
   .content {
-    flex-direction: column; /* stack vertically */
+    flex-direction: column;
     gap: 40px;
   }
 
   .left,
   .form {
-    width: 100%; /* full width on mobile */
+    width: 100%; 
   }
 
   .contactItem img {
-    width: 36px; /* slightly smaller on mobile */
+    width: 36px; 
     height: auto;
   }
 }
 
-/* ✅ Extra polish for very wide screens */
 @media (min-width: 1200px) {
   .form input,
   .form textarea {
-    max-width: 600px; /* prevent stretching edge-to-edge */
+    max-width: 600px; 
   }
 }

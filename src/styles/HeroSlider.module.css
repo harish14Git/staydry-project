@@ -11,7 +11,6 @@
   object-fit: cover;
 }
 
-/* Light overlay like Staydry */
 .overlay {
   position: absolute;
   inset: 0;
@@ -86,7 +85,6 @@
   .slide {
     height: 70vh;
   }
-
   .overlay {
     padding-left: 1.5rem;
     padding-right: 1.5rem;

@@ -2,8 +2,6 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 
-/* ---------------- TYPES ---------------- */
-
 export interface CartItem {
   id: number;
   title: string;
@@ -21,27 +19,22 @@ interface CartContextType {
   clearCart: () => void;
 }
 
-/* ---------------- CONTEXT ---------------- */
 
 const CartContext = createContext<CartContextType | null>(null);
 
-/* ---------------- PROVIDER ---------------- */
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
 
-  // ✅ Cart loaded safely on first render
   const [cart, setCart] = useState<CartItem[]>(() => {
     if (typeof window === "undefined") return [];
     const stored = localStorage.getItem("cart");
     return stored ? JSON.parse(stored) : [];
   });
 
-  // ✅ Persist cart
+  
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
-
-  /* ---------------- ACTIONS ---------------- */
 
   const addToCart = (item: CartItem) => {
     setCart(prev => {
@@ -98,8 +91,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     </CartContext.Provider>
   );
 }
-
-/* ---------------- HOOK ---------------- */
 
 export function useCart() {
   const context = useContext(CartContext);

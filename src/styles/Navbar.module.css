@@ -4,11 +4,11 @@
   border-bottom: 1px solid #eee;
   overflow-x: hidden;
 }
-.hrstyle{
-  color:#ff4d00;
+
+.hrstyle {
+  color: #ff4d00;
 }
 
-/* ───── TOP STRIP ───── */
 .topStrip {
   display: flex;
   justify-content: space-between;
@@ -37,18 +37,20 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 8px; 
 }
+
 .actionItem {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
-.actionItem:hover{
+
+.actionItem:hover {
   background: #ff4d00;
   color: #fff;
-   padding: 6px 8px;
+  padding: 6px 6px;
   border-radius: 999px;
 }
 
@@ -58,9 +60,8 @@
   min-width: 20px;
   min-height: 20px;
   object-fit: contain;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
-
 
 .iconBtn {
   display: flex;
@@ -68,7 +69,7 @@
   gap: 6px;
   color: #000;
   text-decoration: none;
-  padding: 6px 8px;
+  padding: 4px 6px; 
   border-radius: 999px;
 }
 
@@ -77,23 +78,34 @@
   color: #fff;
 }
 
+.iconTextcall {
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .iconText {
   font-size: 14px;
 }
+
 .divider {
-  width: 1px;
+  width: 1.5px;
   height: 22px;
-  background: #ccc;
+  background: #111010;
 }
+
 /* MENU BUTTON */
 .menuBtn {
+  gap: 10px;
   background: none;
   border: none;
   cursor: pointer;
   color: #ff4d00;
+  padding: 4px;
+
 }
 
-/* ───── DESKTOP NAV ───── */
+
+/* DESKTOP NAV  */
 .mainNav {
   display: flex;
   gap: 28px;
@@ -117,7 +129,7 @@
   color: #fff !important;
 }
 
-/* ───── MOBILE MENU ───── */
+/* MOBILE MENU */
 .mobileMenu {
   display: flex;
   flex-direction: column;
@@ -133,21 +145,16 @@
   font-size: 18px;
 }
 
-/* ───── RESPONSIVE ───── */
-@media (max-width: 768px) {
-  .mainNav {
-    display: none;
+
+@media (max-width: 992px) {
+.mainNav{
+  display: none;
+}
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
-  .iconText,
-  .divider {
-    display: none;
-  }
-}
-@media (min-width: 768px) {
-  .icon {
-    width: 22px;
-    height: 22px;
-  }
-}
+} 
 

@@ -16,7 +16,7 @@ const Footer = () => {
   const [agreed, setAgreed] = useState(false);
 
   return (
-    <footer className={styles.footer}>
+    <footer className={`${styles.footer} mx-auto px-4 md:px-8`}>
       <div className={styles.footerGrid}>
         {/* LEFT COLUMN */}
 

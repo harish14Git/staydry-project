@@ -10,7 +10,7 @@
   gap: 2rem;
 }
 
-/* ================= CONTACT ================= */
+/*  CONTACT  */
 
 .contactBlock {
   display: flex;
@@ -25,7 +25,7 @@
   font-weight: bolder;
 }
 
-/* ================= NEWSLETTER ================= */
+/*  NEWSLETTER  */
 
 .inputWrapper {
   position: relative;
@@ -85,7 +85,7 @@
   text-decoration: underline;
 }
 
-/* ================= LINKS ================= */
+/*  LINKS */
 
 .linkGroups {
   display: flex;
@@ -102,7 +102,7 @@
   color: #555;
 }
 
-/* ================= FOOTER BRAND (FIXED PART) ================= */
+/*  FOOTER BRAND */
 
 .footerbrand {
   display: flex;
@@ -132,16 +132,13 @@
 .tagline {
   font-size: 14px;
   color: #444;
-
-  /* 🔑 CRITICAL FIX */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
 }
 
-/* ================= SOCIAL ================= */
-
+/*  SOCIAL */
 .socialRight {
   display: flex;
   justify-content: flex-end;
@@ -150,8 +147,11 @@
   grid-row: 5 / 6;
   color: #555;
 }
+.socialIcon:hover{
+  color:gray ;
+}
 
-/* ================= GRID POSITIONS ================= */
+/*  GRID POSITIONS  */
 
 .newsletter {
   grid-column: 2 / span 2;
@@ -173,7 +173,7 @@
   grid-row: 3 / span 2;
 }
 
-/* ================= MOBILE ================= */
+/* MOBILE*/
 
 @media (max-width: 768px) {
   .footerGrid {
@@ -209,8 +209,6 @@
   .footerbrand {
     grid-column: 1 / -1;
     grid-row: 5 / 6;
-
-    /* stays single-line on mobile */
     justify-content: center;
   }
 

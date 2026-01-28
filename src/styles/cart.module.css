@@ -6,7 +6,7 @@
   flex-direction: column;
 }
 
-/* CONTENT WRAPPER (KEY FIX) */
+/* CONTENT WRAPPER */
 .cartContent {
   flex: 1;
   padding: 4rem 5%;

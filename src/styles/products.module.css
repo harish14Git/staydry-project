@@ -138,7 +138,7 @@
   aspect-ratio: 1 / 1;
 }
 
-/* 📱 MOBILE */
+/* MOBILE */
 @media (max-width: 600px) {
   .controls {
     flex-direction: column;

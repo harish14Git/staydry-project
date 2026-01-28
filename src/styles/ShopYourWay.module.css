@@ -30,7 +30,6 @@
   cursor: pointer;
 }
 
-/* SHOP SECTION */
 
 .shop {
   padding: 48px;
@@ -147,8 +146,6 @@
   background: #111;
   opacity: 0.2;
 }
-
-/* RESPONSIVE */
 
 @media (max-width: 900px) {
   .featureBar {
