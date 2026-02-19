@@ -1,27 +1,83 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, } from "react";
 import Link from "next/link";
 import styles from "@/src/styles/products.module.css";
 import Image from "next/image";
 import srollup from "@/public/Assets/back-to-top.png";
-
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  thumbnail: string;
-  category: string;
-}
+import{ useQuery} from "@tanstack/react-query";
+import { fetchProducts, fetchCategories } from "@/src/services/product-api";
+import { keepPreviousData } from "@tanstack/react-query";
+import{Product, ProductsResponse, Category} from "@/src/types/product-types";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import{useRef} from "react"
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-
+  // const [products, setProducts] = useState<Product[]>([]);
+  // const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("");
   const [showTop, setShowTop] = useState(false);
+  const [page, setPage] = useState<number>(1);
+  const limit = 10;
+  const { data: categoriesData } = useQuery<Category[]>({
+  queryKey: ["categories"],
+  queryFn: fetchCategories,
+  staleTime: 1000 * 60 * 10,
+});
+
+// const { data, isLoading, isError, error, isFetching } =
+//   useQuery<ProductsResponse>({
+//     queryKey: ["products", page, search, category],
+//     queryFn: () => fetchProducts(page, limit, search, category),
+//     placeholderData: keepPreviousData,
+//     staleTime: 1000 * 60 * 5,
+//   });
+const {
+  data,
+  isLoading,
+  isError,
+  error,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+} = useInfiniteQuery({
+  queryKey: ["products", search, category],
+  queryFn: ({ pageParam = 1 }) =>
+    fetchProducts(pageParam, limit, search, category),
+  initialPageParam: 1,
+
+  getNextPageParam: (lastPage, allPages) => {
+    const totalFetched = allPages.length * limit;
+    return totalFetched < lastPage.total
+      ? allPages.length + 1
+      : undefined;
+  },
+});
+
+const loadMoreRef = useRef<HTMLDivElement | null>(null);
+useEffect(() => {
+  if (!loadMoreRef.current) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting && hasNextPage) {
+        fetchNextPage();
+      }
+    },
+    { threshold: 0.5 }
+  );
+
+  observer.observe(loadMoreRef.current);
+
+  return () => observer.disconnect();
+}, [fetchNextPage, hasNextPage]);
+
+
+// const products = data?.products ?? [];
+// const total = data?.total ?? 0;
+const products = data?.pages.flatMap((page) => page.products) ?? [];
+const categories: Category[]= categoriesData ?? [];
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -35,15 +91,14 @@ export default function ProductsPage() {
     setCategory("all");
     setSort("");
   };
-
-  useEffect(() => {
-    fetch("https://dummyjson.com/products")
-      .then(res => res.json())
-      .then(data => {
-        setProducts(data.products);
-        setLoading(false);
-      });
-  }, []);
+  //  useEffect(() => {
+  //   fetch("https://dummyjson.com/products")
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setProducts(data.products);
+  //       setLoading(false);
+  //     });
+  // }, []); 
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,49 +112,49 @@ export default function ProductsPage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-  if (loading) return <p className={styles.page}>Loading products...</p>;
-
-  const categories = ["all", ...new Set(products.map(p => p.category))];
-
-  const filteredProducts = products
-    .filter(p =>
-      p.title.toLowerCase().includes(search.toLowerCase())
-    )
-    .filter(p =>
-      category === "all" || p.category === category
-    )
-    .sort((a, b) => {
-      if (sort === "low") return a.price - b.price;
-      if (sort === "high") return b.price - a.price;
-      return 0;
-    });
+  if(isLoading){
+    return <p className={styles.page}>Loading Products...</p>;
+  }
+  if(isError){
+    return <p>Error: {(error as Error).message}</p>;
+  }
+const sortedProducts = [...products].sort((a, b) => {
+  if (sort === "low") return a.price - b.price;
+  if (sort === "high") return b.price - a.price;
+  return 0;
+});
 
   return (
     <main className={`${styles.page}  mx-auto px-4 md:px-8`}>
-
-      {/* CONTROLS */}
       <div className={styles.controls}>
         <input
           className={styles.search}
           placeholder="Search products..."
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={e => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
         />
 
-        <select
-          className={styles.select}
-          value={category}
-          onChange={e => setCategory(e.target.value)}
-        >
-          {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
+<select
+  value={category}
+  onChange={(e) => {
+    setCategory(e.target.value);
+    setPage(1);
+  }}
+>
+  <option value="all">All</option>
+  {categories.map((category) => (
+  <option key={category.slug} value={category.slug}>
+    {category.name}
+  </option>
+))}
+</select>
 
         <select
           className={styles.select}
-          value={sort}
+          value={sort} 
           onChange={e => setSort(e.target.value)}
         >
           <option value="">Sort by</option>
@@ -116,30 +171,59 @@ export default function ProductsPage() {
 
       </div>
 
-      {filteredProducts.length === 0 && (
-        <div className={styles.empty}>
-          <p>No products found 😕</p>
-        </div>
-      )}
+      {sortedProducts.length === 0 && (
+  <div className={styles.empty}>
+    <p>No products found 😕</p>
+  </div>
+)}
 
-      {/* PRODUCT GRID */}
-      <div className={styles.grid}>
-        {filteredProducts.map(product => (
-          <Link
-            key={product.id}
-            href={`/products/${product.id}`}
-            className={styles.card}
-          >
-            <img
-              src={product.thumbnail}
-              alt={product.title}
-              className={styles.image}
-            />
-            <h3 className={styles.title}>{product.title}</h3>
-            <p className={styles.price}>From Rs. {product.price}</p>
-          </Link>
-        ))}
-      </div>
+<div className={styles.grid}>
+  {sortedProducts.map((product) => (
+    <Link
+      key={product.id}
+      href={`/products/${product.id}`}
+      className={styles.card}
+    >
+      <img
+        src={product.thumbnail}
+        alt={product.title}
+        className={styles.image}
+      />
+      <h3 className={styles.title}>{product.title}</h3>
+      <p className={styles.price}>From Rs. {product.price}</p>
+    </Link>
+  ))}
+</div>
+
+<div ref={loadMoreRef}>
+  {isFetchingNextPage && <p>Loading more Products..</p>}
+</div>
+
+      {/* <div className={styles.pagination}>
+  <button
+    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+    disabled={page === 1}
+  >
+    Previous
+  </button>
+
+  <span>
+    Page {page}
+  </span>
+
+  <button
+    onClick={() => {
+      if (page * limit < total) {
+        setPage((prev) => prev + 1);
+      }
+    }}
+    disabled={page * limit >= total}
+  >
+    Next
+  </button>
+  {isFetching && <p>Updating...</p>}
+</div> */}
+
 {showTop && (
   <button
     className={styles.scrollTop}
@@ -153,7 +237,6 @@ export default function ProductsPage() {
     />
   </button>
 )}
-
     </main>
   );
 }
