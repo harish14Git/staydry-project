@@ -7,6 +7,8 @@ import styles from "@/src/styles/ProductDetails.module.css";
 import { useCart } from "@/src/context/CartContext";
 import Image from "next/image";
 import back from "@/public/Assets/back-button.png";
+import {useQuery} from "@tanstack/react-query";
+import { fetchProductById } from "@/src/services/product-api";
 
 interface Product {
   title: string;
@@ -21,23 +23,29 @@ export default function ProductDetailsPage() {
   const router = useRouter();
   const { addToCart } = useCart();
 
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [product, setProduct] = useState<Product | null>(null);
+  // const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
 
-  useEffect(() => {
-    fetch(`https://dummyjson.com/products/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        setProduct(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [id]);
+  // useEffect(() => {
+  //   fetch(`https://dummyjson.com/products/${id}`)
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setProduct(data);
+  //       setLoading(false);
+  //     })
+  //     .catch(() => setLoading(false));
+  // }, [id]);
+  const { data:product, isLoading, isError} = useQuery<Product>({
+    queryKey:["product", id],
+    queryFn: () => fetchProductById(id as string),
+    enabled: !!id,
+  })
 
-  if (loading) return <p className={styles.page}>Loading product...</p>;
-  if (!product) return <p>Product not found</p>;
+if(isLoading) return <p>Loading Product...</p>;
+if(isError) return <p>Product not found</p>;
+if(!product) return null;
 
   const maxStock = product.stock;
 
@@ -60,7 +68,7 @@ export default function ProductDetailsPage() {
 
   return (
     <main className={`${styles.page}  mx-auto px-4 md:px-8`}>
-      {/* ✅ Back button with Next.js Image */}
+     
       <button onClick={() => router.back()} className={styles.backBtn}>
         <Image
           src={back}
@@ -71,7 +79,6 @@ export default function ProductDetailsPage() {
       </button>
 
       <div className={styles.container}>
-        {/* ✅ Product thumbnail (can stay as <img> or switch to <Image /> for optimization) */}
         <img src={product.thumbnail} alt={product.title} className={styles.image} />
 
         <div className={styles.info}>
@@ -97,12 +104,10 @@ export default function ProductDetailsPage() {
             </button>
           </div>
 
-          {/* ✅ Add to Cart Button */}
           <button className={styles.cartBtn} onClick={handleAddToCart}>
             Add to Cart
           </button>
 
-          {/* ✅ Popup */}
           {showPopup && (
             <div className={styles.cartPopup}>
               ✅ Added to cart
