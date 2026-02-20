@@ -6,19 +6,22 @@ import Image from "next/image";
 import srollup from "@/public/Assets/back-to-top.png";
 import{ useQuery} from "@tanstack/react-query";
 import { fetchProducts, fetchCategories } from "@/src/services/product-api";
-import { keepPreviousData } from "@tanstack/react-query";
-import{Product, ProductsResponse, Category} from "@/src/types/product-types";
+import{ Category} from "@/src/types/product-types";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import{useRef} from "react"
+import{useRef} from "react";
+import { useSearchParams, useRouter} from "next/navigation";
 
 export default function ProductsPage() {
   // const [products, setProducts] = useState<Product[]>([]);
   // const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("all");
+  // const [search, setSearch] = useState("");
+  // const [category, setCategory] = useState("all");
+  
   const [sort, setSort] = useState("");
   const [showTop, setShowTop] = useState(false);
   const [page, setPage] = useState<number>(1);
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const limit = 10;
   const { data: categoriesData } = useQuery<Category[]>({
   queryKey: ["categories"],
@@ -26,13 +29,14 @@ export default function ProductsPage() {
   staleTime: 1000 * 60 * 10,
 });
 
-// const { data, isLoading, isError, error, isFetching } =
-//   useQuery<ProductsResponse>({
-//     queryKey: ["products", page, search, category],
-//     queryFn: () => fetchProducts(page, limit, search, category),
-//     placeholderData: keepPreviousData,
-//     staleTime: 1000 * 60 * 5,
-//   });
+const[search, setSearch] = useState(
+    searchParams.get("search") || ""
+  );
+  const [debouncedSearch, SetDebouncedSearch]= useState(search);
+  const[category, setCategory] =useState(
+    searchParams.get("category") || "all"
+  );
+  
 const {
   data,
   isLoading,
@@ -42,9 +46,9 @@ const {
   hasNextPage,
   isFetchingNextPage,
 } = useInfiniteQuery({
-  queryKey: ["products", search, category],
+  queryKey: ["products", debouncedSearch, category],
   queryFn: ({ pageParam = 1 }) =>
-    fetchProducts(pageParam, limit, search, category),
+    fetchProducts(pageParam, limit, debouncedSearch, category),
   initialPageParam: 1,
 
   getNextPageParam: (lastPage, allPages) => {
@@ -99,6 +103,21 @@ const categories: Category[]= categoriesData ?? [];
   //       setLoading(false);
   //     });
   // }, []); 
+  useEffect(() => {
+  const params = new URLSearchParams();
+  if (search) params.set("search", search);
+  if (category !== "all") params.set("category", category);
+  router.replace(`/products?${params.toString()}`, {scroll: false});
+}, [search, category, router]);
+
+useEffect(() =>{
+  const handler = setTimeout(() => {
+    SetDebouncedSearch(search);
+  }, 5000);
+  return () => {
+    clearTimeout(handler);
+  }
+}, [search]);
 
   useEffect(() => {
     const handleScroll = () => {

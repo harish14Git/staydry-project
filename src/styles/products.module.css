@@ -43,10 +43,6 @@
   transition: transform 0.25s ease;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-}
-
 /* IMAGE */
 .image {
   width: 100%;
@@ -59,29 +55,33 @@
 
 .card:hover .image {
   transform: scale(1.05);
+  overflow:hidden;
+}
+.card:hover .title {
+  font-size: 1.1rem;
 }
 
 /* TITLE */
 .title {
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin: 0.4rem 0;
-  padding: 0.4rem;
-  background: orangered;
+  font-family: TestSohne, sans-serif;
+  font-size: 0.96rem;
+  font-weight: 500;
+  margin: 0 auto;
+  padding: 0.5rem;
+  background: #d4410b;
   color: #fff;
-  border-radius: 6px;
   text-align: center;
   line-height: 1.3;
-  min-height: 48px;
+  min-height: 21h;
+  
 }
 
 /* PRICE */
 .price {
   font-weight: 700;
   color: #222;
-  background: #ffe600;
+  background: #fded78;
   padding: 0.3rem;
-  border-radius: 6px;
   text-align: center;
   font-size: 0.95rem;
 }
@@ -153,3 +153,50 @@
     font-size: 0.9rem;
   }
 }
+/* pagination */
+.pagination {
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.pagination button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: #111;
+  color: #fff;
+  transition: all 0.25s ease;
+}
+.pagination button:hover:not(:disabled) {
+  background-color: #333;
+  transform: translateY(-2px);
+}
+.pagination button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+.pagination span {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  min-width: 80px;
+  text-align: center;
+}
+.pagination p {
+  font-size: 13px;
+  color: #777;
+  margin-left: 10px;
+  animation: fade 0.3s ease-in-out;
+}
+
+
+
+
