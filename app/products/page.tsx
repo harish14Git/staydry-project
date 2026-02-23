@@ -11,6 +11,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import{useRef} from "react";
 import { useSearchParams, useRouter} from "next/navigation";
 
+
 export default function ProductsPage() {
   // const [products, setProducts] = useState<Product[]>([]);
   // const [loading, setLoading] = useState(true);
@@ -62,7 +63,6 @@ const {
 const loadMoreRef = useRef<HTMLDivElement | null>(null);
 useEffect(() => {
   if (!loadMoreRef.current) return;
-
   const observer = new IntersectionObserver(
     (entries) => {
       if (entries[0].isIntersecting && hasNextPage) {
@@ -71,15 +71,10 @@ useEffect(() => {
     },
     { threshold: 0.5 }
   );
-
   observer.observe(loadMoreRef.current);
-
   return () => observer.disconnect();
 }, [fetchNextPage, hasNextPage]);
 
-
-// const products = data?.products ?? [];
-// const total = data?.total ?? 0;
 const products = data?.pages.flatMap((page) => page.products) ?? [];
 const categories: Category[]= categoriesData ?? [];
 
@@ -103,6 +98,7 @@ const categories: Category[]= categoriesData ?? [];
   //       setLoading(false);
   //     });
   // }, []); 
+  
   useEffect(() => {
   const params = new URLSearchParams();
   if (search) params.set("search", search);
@@ -113,7 +109,7 @@ const categories: Category[]= categoriesData ?? [];
 useEffect(() =>{
   const handler = setTimeout(() => {
     SetDebouncedSearch(search);
-  }, 5000);
+  }, 3000);
   return () => {
     clearTimeout(handler);
   }
@@ -131,9 +127,10 @@ useEffect(() =>{
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  if(isLoading){
-    return <p className={styles.page}>Loading Products...</p>;
-  }
+  // if(isLoading){
+  //   return <p className={styles.page}>Loading Products...</p>;
+  // }
+
   if(isError){
     return <p>Error: {(error as Error).message}</p>;
   }
@@ -143,9 +140,42 @@ const sortedProducts = [...products].sort((a, b) => {
   return 0;
 });
 
+const SkeletonCard = () => (
+  <div className={styles.skeletonCard}>
+    <div className={styles.skeletonImage}></div>
+    <div className={styles.skeletonText}></div>
+    <div className={styles.skeletonTextShort}></div>
+  </div>
+);
+
   return (
-    <main className={`${styles.page}  mx-auto px-4 md:px-8`}>
-      <div className={styles.controls}>
+    <main className={`${styles.page}  mx-auto px-4 md:px-8`}> 
+
+<div className={styles.headerRow}>
+  <h1 className={styles.shopTitle}>Shop All</h1>
+  <div className={styles.categorySection}>
+    <p className={styles.categoryLabel}>Select a Category</p>
+    <div className={styles.categoryWrapper}>
+      <button
+        className={`${styles.categoryBtn} ${category === "all" ? styles.activeCategory : ""}`}
+        onClick={() => setCategory("all")}
+      >
+        All
+      </button>
+      {categories.map((cat) => (
+        <button
+          key={cat.slug}
+          className={`${styles.categoryBtn} ${category === cat.slug ? styles.activeCategory : ""}`}
+          onClick={() => setCategory(cat.slug)}
+        >
+          {cat.name}
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
+
+<div className={styles.controls}>
         <input
           className={styles.search}
           placeholder="Search products..."
@@ -155,21 +185,6 @@ const sortedProducts = [...products].sort((a, b) => {
             setPage(1);
           }}
         />
-
-<select
-  value={category}
-  onChange={(e) => {
-    setCategory(e.target.value);
-    setPage(1);
-  }}
->
-  <option value="all">All</option>
-  {categories.map((category) => (
-  <option key={category.slug} value={category.slug}>
-    {category.name}
-  </option>
-))}
-</select>
 
         <select
           className={styles.select}
@@ -190,28 +205,34 @@ const sortedProducts = [...products].sort((a, b) => {
 
       </div>
 
-      {sortedProducts.length === 0 && (
+      {!isLoading && sortedProducts.length === 0 && (
   <div className={styles.empty}>
     <p>No products found 😕</p>
   </div>
 )}
 
 <div className={styles.grid}>
-  {sortedProducts.map((product) => (
-    <Link
-      key={product.id}
-      href={`/products/${product.id}`}
-      className={styles.card}
-    >
-      <img
-        src={product.thumbnail}
-        alt={product.title}
-        className={styles.image}
-      />
-      <h3 className={styles.title}>{product.title}</h3>
-      <p className={styles.price}>From Rs. {product.price}</p>
-    </Link>
-  ))}
+  {isLoading
+    ? Array.from({ length: 8 }).map((_, index) => (
+        <SkeletonCard key={index} />
+      ))
+    : sortedProducts.map((product) => (
+        <Link
+          key={product.id}
+          href={`/products/${product.id}`}
+          className={styles.card}
+        >
+          <img
+            src={product.thumbnail}
+            alt={product.title}
+            className={styles.image}
+          />
+ 
+          <h3 className={styles.title}>{product.title}</h3>
+
+          <p className={styles.price}>From Rs. {product.price}</p>     
+        </Link>
+      ))}
 </div>
 
 <div ref={loadMoreRef}>

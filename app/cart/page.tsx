@@ -1,19 +1,48 @@
 "use client";
-
-import { useCart } from "@/src/context/CartContext";
+// import { useCart } from "@/src/context/CartContext";
 import { useRouter } from "next/navigation";
 import Navbar from "@/src/components/Navbar";
 import styles from "@/src/styles/cart.module.css";
 import emptycart from "@/public/Assets/empty-cart.png";
+import{ useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
+import{getCart, updateQuantity,removeFromCart, clearCartApi}from "@/src/services/cart-api";
+
 
 export default function CartPage() {
   const router = useRouter();
-  const { cart, increaseQty, decreaseQty, removeItem, clearCart } = useCart();
+  // const { cart, increaseQty, decreaseQty, removeItem, clearCart } = useCart();
+  const queryClient = useQueryClient();
+  const{data:cart = []} = useQuery({
+    queryKey:["cart"],
+    queryFn: getCart,
+  });
+    const qtyMutation = useMutation({
+  mutationFn: ({ id, type }: { id: number; type: "inc" | "dec" }) =>
+    updateQuantity(id, type),
+
+  onSuccess: (newCart) => {
+    queryClient.setQueryData(["cart"], newCart);
+  },
+});
+const removeMutation = useMutation({
+  mutationFn: removeFromCart,
+  onSuccess: (newCart) => {
+    queryClient.setQueryData(["cart"], newCart);
+  },
+});
+const clearMutation = useMutation({
+  mutationFn: clearCartApi,
+  onSuccess: () => {
+    queryClient.setQueryData(["cart"], []);
+  },
+})
+
 
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
+
 
   return (
     <main className={styles.cartPage}>
@@ -48,17 +77,20 @@ export default function CartPage() {
                     <p>₹ {item.price}</p>
 
                     <div className={styles.qtyBox}>
-                      <button onClick={() => decreaseQty(item.id)}>-</button>
+                      {/* <button onClick={() => decreaseQty(item.id)}>-</button> */}
+                      <button onClick={() => qtyMutation.mutate({id:item.id, type:"dec"})}>-</button>
                       <span>{item.quantity}</span>
-                      <button onClick={() => increaseQty(item.id)}>+</button>
+                       {/* <button onClick={() => increaseQty(item.id)}>+</button> */}
+                      <button onClick={() => qtyMutation.mutate({id:item.id, type:"inc"})} disabled={qtyMutation.isPending}>+</button>
                     </div>
 
                     <button
                       className={styles.removeBtn}
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeMutation.mutate(item.id)}
                     >
                       Remove
                     </button>
+
                   </div>
                 </div>
               ))}
@@ -74,7 +106,7 @@ export default function CartPage() {
                 Proceed to Checkout
               </button>
 
-              <button className={styles.clearBtn} onClick={clearCart}>
+              <button className={styles.clearBtn} onClick={() => clearMutation.mutate()}>
                 Clear Cart
               </button>
             </div>
