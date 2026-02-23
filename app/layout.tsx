@@ -3,6 +3,7 @@ import { Inter, Geist, Geist_Mono } from "next/font/google";
 import Footer from "@/src/components/Footer";
 import Navbar from "@/src/components/Navbar";
 import { CartProvider } from "@/src/context/CartContext";
+import Providers from "./provider";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -38,14 +39,16 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
-      >
+      > 
+      <Providers>
         <CartProvider>
   
             <Navbar />
-            <main className="py-6 md:py-12 ">{children}</main>
+            <main className="py-1 md:py-1 ">{children}</main>
           <Footer />
          
         </CartProvider>
+        </Providers>
       </body>
     </html>
   );

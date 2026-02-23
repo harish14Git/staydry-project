@@ -1,14 +1,8 @@
-/* ─────────────────────────────────────────────
-   Tailwind base imports (DO NOT CHANGE ORDER)
-───────────────────────────────────────────── */
-@import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-/* ─────────────────────────────────────────────
-   Global Reset & Overflow Fix (VERY IMPORTANT)
-───────────────────────────────────────────── */
+@import "tailwindcss";
+/* @tailwind base;
+@tailwind components; */
+
 html,
 body {
   width: 100%;
@@ -16,16 +10,11 @@ body {
   overflow-x: hidden; 
 }
 
-/* Safe global box sizing (allowed in globals.css) */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-
-/* ─────────────────────────────────────────────
-   Theme variables
-───────────────────────────────────────────── */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -38,9 +27,6 @@ body {
   --font-mono: var(--font-geist-mono);
 }
 
-/* ─────────────────────────────────────────────
-   Dark mode
-───────────────────────────────────────────── */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -48,9 +34,6 @@ body {
   }
 }
 
-/* ─────────────────────────────────────────────
-   Footer styles
-───────────────────────────────────────────── */
 .footer {
   background: #f6f1ee;
   padding: 40px;
@@ -112,9 +95,6 @@ body {
   font-weight: bold;
 }
 
-/* ─────────────────────────────────────────────
-   Typography utilities (Tailwind layer)
-───────────────────────────────────────────── */
 @layer components {
   .h1 {
     @apply font-sans font-bold text-4xl md:text-5xl leading-tight;

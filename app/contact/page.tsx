@@ -1,7 +1,7 @@
 "use client";
-
 import { useState } from "react";
 import Image from "next/image";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styles from "@/src/styles/contact.module.css";
 
 export default function ContactPage() {
@@ -10,16 +10,13 @@ export default function ContactPage() {
   const [phone, setPhone] = useState("");
   const [date, setDate] = useState("");
   const [message, setMessage] = useState("");
-
-
   const [showPopup, setShowPopup] = useState(false);
-
-
   const [submittedData, setSubmittedData] = useState<null | {
     name: string;
     email: string;
     phone: string;
   }>(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // VALIDATIONS
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
@@ -34,30 +31,62 @@ export default function ContactPage() {
     isEmailValid &&
     isPhoneValid;
 
+const queryClient = useQueryClient();
+type ContactFormData = {
+  name: string;
+  email: string;
+  phone: string;
+  date: string;
+  message: string;
+};
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
 
-    if (!isFormValid) return;
-
-    const response = await fetch("/api/contact", {
+const contactMutation = useMutation({
+  mutationFn: async (formData: ContactFormData) => {
+    const response = await fetch("http://localhost:3001/contacts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        email,
-        phone,
-        date,
-        message,
-      }),
+      body: JSON.stringify(formData),
     });
 
-    if (response.ok) {
-      setSubmittedData({ name, email, phone });
-      setShowPopup(true);
-      handleReset();
+    if (!response.ok) {
+      throw new Error("Failed to send message");
     }
-  };
+
+    return response.json();
+  },
+
+  onSuccess: (data) => {
+    queryClient.invalidateQueries({ queryKey: ["contacts"] });
+
+    setSubmittedData({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+    });
+
+    setShowPopup(true);
+    handleReset();
+  },
+
+  onError: () => {
+    setErrorMessage("Failed to submit. please try again.");
+  },
+});
+    
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  if (!isFormValid) return;
+
+  contactMutation.mutate({
+    name,
+    email,
+    phone,
+    date,
+    message,
+  });
+};
 
   const handleReset = () => {
     setName("");
@@ -183,9 +212,16 @@ export default function ContactPage() {
           />
 
           <div className={styles.buttons}>
-            <button type="submit" disabled={!isFormValid}>
+            {/* <button type="submit" disabled={!isFormValid}>
               Submit
-            </button>
+            </button> */}
+
+          <button
+  type="submit"
+  disabled={!isFormValid || contactMutation.isPending}
+>
+  {contactMutation.isPending ? "Sending..." : "Submit"}
+</button>
 
             <button type="button" onClick={handleReset}>
               Reset

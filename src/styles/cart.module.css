@@ -29,7 +29,6 @@
   width: 100%;
   max-width: 600px;
   min-height: 55vh;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -78,10 +77,11 @@
 .thumbnail {
   width: 120px;
   height: 120px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 12px;
+  background: #f6f7f9; 
+  padding: 4px;        
 }
-
 /* INFO */
 .info {
   flex: 1;

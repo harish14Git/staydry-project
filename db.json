@@ -1,0 +1,20 @@
+{
+  "contacts": [
+    {
+      "name": "Harish B",
+      "email": "harish@ozzi.tech",
+      "phone": "1111211111",
+      "date": "2026-02-23",
+      "message": "hello",
+      "id": 1
+    },
+    {
+      "name": "dinesh",
+      "email": "dinesh@ozzi.tech",
+      "phone": "3333333333",
+      "date": "2026-02-27",
+      "message": "",
+      "id": 2
+    }
+  ]
+}
