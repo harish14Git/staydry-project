@@ -297,4 +297,11 @@
     width: 100%;
   }
 }
+.closeIcon {
+  font-size: 24px;
+  font-weight: 400;
+  margin-left: 8px;
+  color: white;
+  padding: 0px 3px;
+}
 

@@ -13,11 +13,7 @@ import { useSearchParams, useRouter} from "next/navigation";
 
 
 export default function ProductsPage() {
-  // const [products, setProducts] = useState<Product[]>([]);
   // const [loading, setLoading] = useState(true);
-  // const [search, setSearch] = useState("");
-  // const [category, setCategory] = useState("all");
-  
   const [sort, setSort] = useState("");
   const [showTop, setShowTop] = useState(false);
   const [page, setPage] = useState<number>(1);
@@ -162,15 +158,24 @@ const SkeletonCard = () => (
       >
         All
       </button>
+
       {categories.map((cat) => (
-        <button
-          key={cat.slug}
-          className={`${styles.categoryBtn} ${category === cat.slug ? styles.activeCategory : ""}`}
-          onClick={() => setCategory(cat.slug)}
-        >
-          {cat.name}
-        </button>
-      ))}
+  <button
+    key={cat.slug}
+    className={`${styles.categoryBtn} ${category === cat.slug ? styles.activeCategory : ""}`}
+    onClick={() => {
+      if (category === cat.slug) {
+        setCategory("all");
+      } else {
+        setCategory(cat.slug);
+      }
+    }}
+  >
+    {cat.name}
+    {category === cat.slug && <span className={styles.closeIcon}> ×</span>}
+  </button>
+))}
+      
     </div>
   </div>
 </div>
@@ -222,7 +227,7 @@ const SkeletonCard = () => (
           href={`/products/${product.id}`}
           className={styles.card}
         >
-          <img
+          <Image width={400} height={400}
             src={product.thumbnail}
             alt={product.title}
             className={styles.image}
@@ -239,30 +244,6 @@ const SkeletonCard = () => (
   {isFetchingNextPage && <p>Loading more Products..</p>}
 </div>
 
-      {/* <div className={styles.pagination}>
-  <button
-    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-    disabled={page === 1}
-  >
-    Previous
-  </button>
-
-  <span>
-    Page {page}
-  </span>
-
-  <button
-    onClick={() => {
-      if (page * limit < total) {
-        setPage((prev) => prev + 1);
-      }
-    }}
-    disabled={page * limit >= total}
-  >
-    Next
-  </button>
-  {isFetching && <p>Updating...</p>}
-</div> */}
 
 {showTop && (
   <button

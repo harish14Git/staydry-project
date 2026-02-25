@@ -137,12 +137,24 @@
   gap: 18px;
   padding: 20px;
   border-top: 1px solid #eee;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+.menuOpen {
+  max-height: 400px;
+  opacity: 1;
+}
+.menuClosed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  border: none;
 }
 
 .mobileMenu a {
   text-decoration: none;
   color: #ff4d00;
-  font-size: 18px;
+  font-size: 19px;
 }
 
 
@@ -158,3 +170,12 @@
 
 } 
 
+.cartBadge {
+  background: orange;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
+  margin-left: 4px;
+}

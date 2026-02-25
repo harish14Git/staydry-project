@@ -1,16 +1,22 @@
 "use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import styles from "@/src/styles/Navbar.module.css";
 import call from "@/public/Assets/svg-image-4.svg";
-
 import logoBlack from "@/public/Assets/Staydry.svg";
 import logoKids from "@/public/Assets/Staydry Kids.svg";
+import { CartItem, getCart } from "@/src/services/cart-api";
+import { useQuery } from "@tanstack/react-query";
+
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+
+  const{ data : cart = []} = useQuery<CartItem[]>({
+    queryKey: ["cart"],
+    queryFn: getCart,
+  });
 
   return (
     <header className={`${styles.navbar} mx-auto px-4 md:px-8`}>
@@ -27,13 +33,13 @@ export default function Navbar() {
 
         {/* DESKTOP MENU ICON */}
 
-        <button
-          className={`${styles.menuBtn} ${styles.desktopMenu} hidden lg:flex`}
-          onClick={() => setOpen(!open)}
-          aria-label="Menu"
-        >
-          <p>Menu</p> <MenuIcon />
-        </button>
+      <button
+  className={`${styles.menuBtn} ${styles.desktopMenu} hidden lg:flex`}
+  onClick={() => setOpen(!open)}
+  aria-label="Menu"
+>
+  {open ? <><p>Menu</p> <CloseIcon /></> : <><p>Menu</p> <MenuIcon /></>}
+</button>
       </div>
 
       <span className={styles.hrstyle}>
@@ -52,7 +58,7 @@ export default function Navbar() {
         <div className={styles.actions}>
           <Link
             href="/products"
-            className={` lg:hidden   ${styles.iconBtnserach}`}
+            className={` lg:hidden ${styles.iconBtnserach}`}
           >
             <SearchIcon />
           </Link>
@@ -79,22 +85,31 @@ export default function Navbar() {
             <SearchIcon />
           </Link>
 
-          <Link href="/cart" className={styles.iconBtn}>
+          {/* <Link href="/cart" className={styles.iconBtn}>
             <span className={styles.iconText}>Cart</span>
-          </Link>
+          </Link> */}
+          <Link href="/cart" className={styles.iconBtn}>
+  <span className={styles.iconText}>
+    Cart {cart.length > 0 && (
+      <span className={styles.cartBadge}>{cart.length}</span>
+    )}
+  </span>
+</Link>
 
-          <button
-            className={`${styles.menuBtn} ${styles.desktopMenu} lg:hidden`}
-            onClick={() => setOpen(!open)}
-            aria-label="Menu"
-          >
-            <MenuIcon />
-          </button>
+<button
+  className={`${styles.menuBtn} ${styles.desktopMenu} lg:hidden`}
+  onClick={() => setOpen(!open)}
+  aria-label="Menu"
+>
+  {open ? <CloseIcon /> : <MenuIcon />}
+</button>
+  
         </div>
       </div>
 
       {open && (
-        <div className={styles.mobileMenu}>
+        <div className={`${styles.mobileMenu} ${open ? styles.menuOpen : styles.menuClosed}`}>
+       
           <Link href="/products" onClick={() => setOpen(false)}>
             Shop All
           </Link>
@@ -145,6 +160,20 @@ function MenuIcon() {
       <line x1="3" y1="6" x2="21" y2="6" />
       <line x1="3" y1="12" x2="21" y2="12" />
       <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+  );
+}
+function CloseIcon() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <line x1="3" y1="3" x2="21" y2="21" />
+      <line x1="21" y1="3" x2="3" y2="21" />
     </svg>
   );
 }
