@@ -1,0 +1,202 @@
+/* PAGE */
+.page {
+  padding: 2.5rem 5%;
+  max-width: 1300px;
+  margin: auto;
+}
+
+/* SEARCH / FILTER / SORT */
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* INPUTS */
+.search,
+.select {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  min-width: 200px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+/* CARD */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.8rem;
+  text-decoration: none;
+  color: #000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s ease;
+}
+
+/* IMAGE */
+.image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.6rem;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+  overflow:hidden;
+}
+.card:hover .title {
+  font-size: 1.1rem;
+}
+
+/* TITLE */
+.title {
+  font-family: TestSohne, sans-serif;
+  font-size: 0.96rem;
+  font-weight: 500;
+  margin: 0 auto;
+  padding: 0.5rem;
+  background: #d4410b;
+  color: #fff;
+  text-align: center;
+  line-height: 1.3;
+  min-height: 21h;
+  
+}
+
+/* PRICE */
+.price {
+  font-weight: 700;
+  color: #222;
+  background: #fded78;
+  padding: 0.3rem;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* EMPTY STATE */
+.empty {
+  text-align: center;
+  padding: 2.5rem;
+  font-size: 1.1rem;
+  color: #777;
+}
+
+.empty p {
+  background: #ffefc1;
+  padding: 0.7rem 1.2rem;
+  border-radius: 6px;
+}
+
+/* SCROLL TO TOP */
+.scrollTop {
+  position: fixed;
+  bottom: 1.8rem;
+  right: 1.8rem;
+  padding: 0.6rem 0.9rem;
+  background: rgb(214, 105, 16);
+  color: #111;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-weight: 700;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+  transition: background 0.3s ease;
+}
+
+.scrollTop:hover {
+  background: yellow;
+}
+
+/* CLEAR BUTTON */
+.clearBtn {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* ICON */
+.topIcon {
+  width: 100%;
+  max-width: 160px;
+  aspect-ratio: 1 / 1;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .controls {
+    flex-direction: column;
+  }
+
+  .search,
+  .select {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 0.9rem;
+  }
+}
+/* pagination */
+.pagination {
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.pagination button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: #111;
+  color: #fff;
+  transition: all 0.25s ease;
+}
+.pagination button:hover:not(:disabled) {
+  background-color: #333;
+  transform: translateY(-2px);
+}
+.pagination button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+.pagination span {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  min-width: 80px;
+  text-align: center;
+}
+.pagination p {
+  font-size: 13px;
+  color: #777;
+  margin-left: 10px;
+  animation: fade 0.3s ease-in-out;
+}
+
+
+
+

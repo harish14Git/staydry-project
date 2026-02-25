@@ -2,69 +2,94 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Navbar from "../../components/Navbar";
-import styles from "./ProductDetails.module.css";
+import Navbar from "@/src/components/Navbar";
+import styles from "@/src/styles/ProductDetails.module.css";
+import { useCart } from "@/src/context/CartContext";
+import Image from "next/image";
+import back from "@/public/Assets/back-button.png";
+import {useQuery} from "@tanstack/react-query";
+import { fetchProductById } from "@/src/services/product-api";
 
 interface Product {
   title: string;
   price: number;
   thumbnail: string;
   description: string;
+  stock: number;
 }
 
 export default function ProductDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
+  const { addToCart } = useCart();
 
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [product, setProduct] = useState<Product | null>(null);
+  // const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [showPopup, setShowPopup] = useState(false);
 
-  useEffect(() => {
-    fetch(`https://dummyjson.com/products/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        setProduct(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [id]);
+  // useEffect(() => {
+  //   fetch(`https://dummyjson.com/products/${id}`)
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setProduct(data);
+  //       setLoading(false);
+  //     })
+  //     .catch(() => setLoading(false));
+  // }, [id]);
+  const { data:product, isLoading, isError} = useQuery<Product>({
+    queryKey:["product", id],
+    queryFn: () => fetchProductById(id as string),
+    enabled: !!id,
+  })
 
-  if (loading) return <p className={styles.page}>Loading product...</p>;
-  if (!product) return <p className={styles.page}>Product not found</p>;
+if(isLoading) return <p>Loading Product...</p>;
+if(isError) return <p>Product not found</p>;
+if(!product) return null;
+
+  const maxStock = product.stock;
 
   const handleAddToCart = () => {
-    console.log("Added to cart:", {
-      productId: id,
+    addToCart({
+      id: Number(id),
       title: product.title,
-      quantity
+      price: product.price,
+      thumbnail: product.thumbnail,
+      quantity,
     });
+
+    setShowPopup(true);
+
+    // hide popup after 2 seconds
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 2000);
   };
 
   return (
-    <main className={styles.page}>
-      <Navbar />
-
+    <main className={`${styles.page}  mx-auto px-4 md:px-8`}>
+     
       <button onClick={() => router.back()} className={styles.backBtn}>
-        ← Back
+        <Image
+          src={back}
+          alt="Move to back"
+          width={30}
+          height={30}
+        />
       </button>
 
       <div className={styles.container}>
-        <img
-          src={product.thumbnail}
-          alt={product.title}
-          className={styles.image}
-        />
+        <img src={product.thumbnail} alt={product.title} className={styles.image} />
 
         <div className={styles.info}>
-          <h1 className={styles.title}>{product.title}</h1>
-          <p className={styles.description}>{product.description}</p>
-          <p className={styles.price}>₹ {product.price}</p>
+          <h1>{product.title}</h1>
+          <p>{product.description}</p>
+          <p>₹ {product.price}</p>
 
           <div className={styles.qtyBox}>
             <button
-              className={styles.qtyBtn}
-              onClick={() => quantity > 1 && setQuantity(quantity - 1)}
+              onClick={() => setQuantity(q => q - 1)}
+              disabled={quantity === 1}
             >
               −
             </button>
@@ -72,19 +97,22 @@ export default function ProductDetailsPage() {
             <span>{quantity}</span>
 
             <button
-              className={styles.qtyBtn}
-              onClick={() => setQuantity(quantity + 1)}
+              onClick={() => setQuantity(q => q + 1)}
+              disabled={quantity === maxStock}
             >
               +
             </button>
           </div>
 
-          <button
-            className={styles.cartBtn}
-            onClick={handleAddToCart}
-          >
+          <button className={styles.cartBtn} onClick={handleAddToCart}>
             Add to Cart
           </button>
+
+          {showPopup && (
+            <div className={styles.cartPopup}>
+              ✅ Added to cart
+            </div>
+          )}
         </div>
       </div>
     </main>
