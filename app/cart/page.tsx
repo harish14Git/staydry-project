@@ -1,64 +1,34 @@
 "use client";
-// import { useCart } from "@/src/context/CartContext";
 import { useRouter } from "next/navigation";
-import Navbar from "@/src/components/Navbar";
 import styles from "@/src/styles/cart.module.css";
-import emptycart from "@/public/Assets/empty-cart.png";
-import{ useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
-import{getCart, updateQuantity,removeFromCart, clearCartApi}from "@/src/services/cart-api";
-
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState } from "@/src/store/store";
+import { increaseQty, decreaseQty, removeItem, clearCart } from "@/src/store/cartSlice";
 
 export default function CartPage() {
   const router = useRouter();
-  // const { cart, increaseQty, decreaseQty, removeItem, clearCart } = useCart();
-  const queryClient = useQueryClient();
-  const{data:cart = []} = useQuery({
-    queryKey:["cart"],
-    queryFn: getCart,
-  });
-    const qtyMutation = useMutation({
-  mutationFn: ({ id, type }: { id: number; type: "inc" | "dec" }) =>
-    updateQuantity(id, type),
+  const dispatch = useDispatch();
 
-  onSuccess: (newCart) => {
-    queryClient.setQueryData(["cart"], newCart);
-  },
-});
-const removeMutation = useMutation({
-  mutationFn: removeFromCart,
-  onSuccess: (newCart) => {
-    queryClient.setQueryData(["cart"], newCart);
-  },
-});
-const clearMutation = useMutation({
-  mutationFn: clearCartApi,
-  onSuccess: () => {
-    queryClient.setQueryData(["cart"], []);
-  },
-})
-
+  // reading cart items from Redux store
+  const cart = useSelector((state: RootState) => state.cart.items);
 
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
-
   return (
     <main className={styles.cartPage}>
-
       <div className={styles.cartContent}>
         <h1 className={styles.cartTitle}>My Cart</h1>
 
         {cart.length === 0 ? (
           <div className={styles.emptyCartWrapper}>
-
             <img
               src="/Assets/empty-cart.png"
               alt="Empty Cart"
               className={styles.emptyCartImage}
             />
-
             <p className={styles.emptyCartText}>Your cart is empty 🛒</p>
           </div>
         ) : (
@@ -71,26 +41,22 @@ const clearMutation = useMutation({
                     alt={item.title}
                     className={styles.thumbnail}
                   />
-
                   <div className={styles.info}>
                     <h3>{item.title}</h3>
                     <p>₹ {item.price}</p>
 
                     <div className={styles.qtyBox}>
-                      {/* <button onClick={() => decreaseQty(item.id)}>-</button> */}
-                      <button onClick={() => qtyMutation.mutate({id:item.id, type:"dec"})}>-</button>
+                      <button onClick={() => dispatch(decreaseQty(item.id))}>-</button>
                       <span>{item.quantity}</span>
-                       {/* <button onClick={() => increaseQty(item.id)}>+</button> */}
-                      <button onClick={() => qtyMutation.mutate({id:item.id, type:"inc"})} disabled={qtyMutation.isPending}>+</button>
+                      <button onClick={() => dispatch(increaseQty(item.id))}>+</button>
                     </div>
 
                     <button
                       className={styles.removeBtn}
-                      onClick={() => removeMutation.mutate(item.id)}
+                      onClick={() => dispatch(removeItem(item.id))}
                     >
                       Remove
                     </button>
-
                   </div>
                 </div>
               ))}
@@ -98,15 +64,16 @@ const clearMutation = useMutation({
 
             <div className={styles.summary}>
               <h2>Total: ₹ {totalPrice}</h2>
-
               <button
                 className={styles.checkoutBtn}
                 onClick={() => router.push("/checkout")}
               >
                 Proceed to Checkout
               </button>
-
-              <button className={styles.clearBtn} onClick={() => clearMutation.mutate()}>
+              <button
+                className={styles.clearBtn}
+                onClick={() => dispatch(clearCart())}
+              >
                 Clear Cart
               </button>
             </div>
