@@ -6,15 +6,18 @@ import Image from "next/image";
 import back from "@/public/Assets/back-button.png";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductById, fetchProducts } from "@/src/services/product-api";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import { addToCart } from "@/src/store/cartSlice";
 import { ProductsResponse, Product as ProductType } from "@/src/types/product-types";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Thumbs } from "swiper/modules";
-import { Swiper as SwiperType } from "swiper";
+import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
+import ProductImageSwiper from "@/src/components/ProductImageSwiper";
+import { toggleWishlist } from "@/src/store/wishlistSlice";
+import type { RootState } from "@/src/store/store";
+
 
 interface Product {
   id: number;
@@ -31,11 +34,8 @@ export default function ProductDetailsPage() {
   const { id } = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
-
   const [quantity, setQuantity] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
-  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null); 
-
   const { data: product, isLoading, isError } = useQuery<Product>({
     queryKey: ["product", id],
     queryFn: () => fetchProductById(id as string),
@@ -48,6 +48,8 @@ export default function ProductDetailsPage() {
     enabled: !!product?.category,
   });
 
+  const wishlist = useSelector((state: RootState) => state.wishlist.items);
+  const isWishlisted = (id: number) => wishlist.some(i => i.id === id);
   const relatedProducts = relatedData?.products.filter((p) => p.id !== product?.id) ?? [];
 
   if (isLoading) return <p>Loading Product...</p>;
@@ -78,47 +80,8 @@ export default function ProductDetailsPage() {
 
       <div className={styles.container}>
 
-        <div className={styles.thumbnailStrip}>
-          <Swiper
-            modules={[Thumbs]}
-            onSwiper={setThumbsSwiper}
-            direction="vertical"
-            slidesPerView={4}
-            spaceBetween={10}
-            className={styles.thumbSwiper}
-          >
-            {product.images.map((img, index) => (
-              <SwiperSlide key={index}>
-                <img
-                  src={img}
-                  alt={`thumb-${index}`}
-                  className={styles.thumb}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+         <ProductImageSwiper images={product.images} title={product.title} />
 
-        <div className={styles.imageWrapper}>
-          <Swiper
-            modules={[Navigation, Thumbs]}
-            navigation
-            thumbs={{ swiper: thumbsSwiper }}
-            spaceBetween={10}
-            slidesPerView={1}
-            className={styles.mainSwiper}
-          >
-            {product.images.map((img, index) => (
-              <SwiperSlide key={index}>
-                <img
-                  src={img}
-                  alt={`${product.title} ${index + 1}`}
-                  className={styles.image}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
 
         <div className={styles.info}>
           <h1>{product.title}</h1>
@@ -138,6 +101,21 @@ export default function ProductDetailsPage() {
           <button className={styles.cartBtn} onClick={handleAddToCart}>
             Add to Cart
           </button>
+
+          <button
+  className={`${styles.wishlistBtn} ${isWishlisted(product.id) ? styles.wishlisted : ""}`}
+  onClick={(e) => {
+    e.stopPropagation(); 
+    dispatch(toggleWishlist({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      thumbnail: product.thumbnail,
+    }));
+  }}
+>
+  {isWishlisted(product.id) ? "❤️" : "🤍"}
+</button>
 
           {showPopup && (
             <div className={styles.cartPopup}>
@@ -168,7 +146,7 @@ export default function ProductDetailsPage() {
             className={styles.sliderCard}
             onClick={() => router.push(`/products/${p.id}`)}
           >
-            <img src={p.thumbnail} alt={p.title} className={styles.sliderImage} />
+            <Image src={p.thumbnail} alt={p.title} className={styles.sliderImage} width={200} height={200} />
             <p className={styles.sliderTitle}>{p.title}</p>
             <p className={styles.sliderPrice}>₹ {p.price}</p>
           </div>

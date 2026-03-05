@@ -1,7 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface CartItem {
+interface CartItem {
   id: number;
   title: string;
   price: number;
@@ -10,55 +9,64 @@ export interface CartItem {
 }
 
 interface CartState {
-  items: CartItem[];  
+  items: CartItem[];
+  appliedCoupon: string | null;
+  discount: number;
 }
 
 const initialState: CartState = {
   items: [],
+  appliedCoupon: null,
+  discount: 0,
 };
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-
-    addToCart: (state, action: PayloadAction<CartItem>) => {
+    addToCart(state, action: PayloadAction<CartItem>) {
       const existing = state.items.find(i => i.id === action.payload.id);
       if (existing) {
-        existing.quantity += 1;
+        existing.quantity += action.payload.quantity;
       } else {
-        state.items.push({ ...action.payload, quantity: 1 });
+        state.items.push(action.payload);
       }
     },
-
-    increaseQty: (state, action: PayloadAction<number>) => {
+    increaseQty(state, action: PayloadAction<number>) {
       const item = state.items.find(i => i.id === action.payload);
       if (item) item.quantity += 1;
     },
-
-    decreaseQty: (state, action: PayloadAction<number>) => {
+    decreaseQty(state, action: PayloadAction<number>) {
       const item = state.items.find(i => i.id === action.payload);
-      if (item) {
-        if (item.quantity === 1) {
-          state.items = state.items.filter(i => i.id !== action.payload);
-        } else {
-          item.quantity -= 1;
-        }
-      }
+      if (item && item.quantity > 1) item.quantity -= 1;
     },
-
-    removeItem: (state, action: PayloadAction<number>) => {
+    removeItem(state, action: PayloadAction<number>) {
       state.items = state.items.filter(i => i.id !== action.payload);
     },
-
-    clearCart: (state) => {
+    clearCart(state) {
       state.items = [];
+      state.appliedCoupon = null;
+      state.discount = 0;
     },
-
+    applyCoupon(state, action: PayloadAction<{ code: string; discount: number }>) {
+      state.appliedCoupon = action.payload.code;
+      state.discount = action.payload.discount;
+    },
+    removeCoupon(state) {
+      state.appliedCoupon = null;
+      state.discount = 0;
+    },
   },
 });
 
-export const { addToCart, increaseQty, decreaseQty, removeItem, clearCart } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  increaseQty,
+  decreaseQty,
+  removeItem,
+  clearCart,
+  applyCoupon,
+  removeCoupon,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

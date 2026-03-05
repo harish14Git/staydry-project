@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import Footer from "@/src/components/Footer";
 import Navbar from "@/src/components/Navbar";
 import Providers from "./provider";
@@ -11,16 +11,6 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
-});
-
-const geistSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist-sans",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -35,9 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
-      >
+      <body className={`${inter.variable} antialiased`}>
         <Providers>
           <Navbar />
           <main className="py-1 md:py-1">{children}</main>

@@ -22,7 +22,6 @@
   color: #fff;
 }
 
-/* Text block */
 .textBlock {
   max-width: 520px;
 }
@@ -41,7 +40,6 @@
   opacity: 0.95;
 }
 
-/* Orange pill button */
 .cta {
   display: inline-block;
   background: #f15a22;
@@ -57,8 +55,6 @@
   background: #d94f1f;
   transform: translateY(-2px);
 }
-
-/* Bottom categories */
 .categories {
   position: absolute;
   bottom: 2rem;
@@ -70,17 +66,14 @@
   font-weight: 600;
   color: #fff;
 }
-
 .categories span {
   cursor: pointer;
   opacity: 0.9;
 }
-
 .categories span:hover {
   text-decoration: underline;
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .slide {
     height: 70vh;

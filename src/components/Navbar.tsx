@@ -8,14 +8,17 @@ import logoBlack from "@/public/Assets/Staydry.svg";
 import logoKids from "@/public/Assets/Staydry Kids.svg";
 import { useSelector } from "react-redux";          
 import type { RootState } from "@/src/store/store"; 
+import { useDispatch } from "react-redux";
+import { toggleWishlist } from "@/src/store/wishlistSlice";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-
+  const dispatch = useDispatch();
   // read cart from Redux store instead of React Query
   const cart = useSelector((state: RootState) => state.cart.items);
-
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  const [wishlistOpen, setWishlistOpen] = useState(false);
+  const wishlist = useSelector((state: RootState) => state.wishlist.items);
 
   return (
     <header className={`${styles.navbar} mx-auto px-4 md:px-8`}>
@@ -71,10 +74,18 @@ export default function Navbar() {
           <span className={styles.iconTextcall}>Call</span>
 
           <span className={styles.divider} />
-
           <Link href="/products" className={`hidden lg:block ${styles.iconBtnserach}`}>
             <SearchIcon />
           </Link>
+
+          <button className={styles.iconBtn} onClick={() => setWishlistOpen(true)}>
+  <span className={styles.iconText}>
+    Wishlist{" "}
+    {wishlist.length > 0 && (
+      <span className={styles.cartBadge}>{wishlist.length}</span>
+    )}
+  </span>
+</button>
 
           <Link href="/cart" className={styles.iconBtn}>
             <span className={styles.iconText}>
@@ -104,11 +115,47 @@ export default function Navbar() {
           <Link href="/products#mobility" onClick={() => setOpen(false)}>Mobility</Link>
         </div>
       )}
+
+
+      {/* Wishlist Slide Panel */}
+{wishlistOpen && (
+  <div className={styles.wishlistOverlay} onClick={() => setWishlistOpen(false)} />
+)}
+
+<div className={`${styles.wishlistPanel} ${wishlistOpen ? styles.panelOpen : ""}`}>
+  <div className={styles.panelHeader}>
+    <h2>My Wishlist</h2>
+    <button onClick={() => setWishlistOpen(false)}>✕</button>
+  </div>
+
+  {wishlist.length === 0 ? (
+    <p className={styles.emptyWishlist}>No items in wishlist 🤍</p>
+  ) : (
+    <div className={styles.wishlistItems}>
+      {wishlist.map((item) => (
+        <div key={item.id} className={styles.wishlistItem}>
+          <Image src={item.thumbnail} alt={item.title} className={styles.wishlistThumb} width={50} height={50} />
+          <div className={styles.wishlistInfo}>
+            <p className={styles.wishlistTitle}>{item.title}</p>
+            <p className={styles.wishlistPrice}>₹ {item.price}</p>
+          </div>
+          <button
+            className={styles.removeWishlist}
+            onClick={() => dispatch(toggleWishlist(item))}
+          >
+            ✕
+          </button>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
     </header>
   );
 }
 
-/* ICONS */
+/* Icons */
 function SearchIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

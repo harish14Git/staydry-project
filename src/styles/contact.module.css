@@ -71,7 +71,7 @@
   gap: 10px;
 }
 
-button:disabled {
+.submitBtn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

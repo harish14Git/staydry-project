@@ -10,8 +10,6 @@
   gap: 2rem;
 }
 
-/*  CONTACT  */
-
 .contactBlock {
   display: flex;
   flex-direction: column;
@@ -24,8 +22,6 @@
   gap: 0.6rem;
   font-weight: bolder;
 }
-
-/*  NEWSLETTER  */
 
 .inputWrapper {
   position: relative;
@@ -85,8 +81,6 @@
   text-decoration: underline;
 }
 
-/*  LINKS */
-
 .linkGroups {
   display: flex;
   gap: 3.5rem;
@@ -102,18 +96,13 @@
   color: #555;
 }
 
-/*  FOOTER BRAND */
-
 .footerbrand {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-
-  /* 🔑 CRITICAL FIX */
   flex-wrap: nowrap;
   min-width: 0;
-
   grid-column: 2;
   grid-row: 5 / 6;
 }
@@ -128,7 +117,6 @@
   background: #000;
   flex-shrink: 0;
 }
-
 .tagline {
   font-size: 14px;
   color: #444;
@@ -138,7 +126,6 @@
   min-width: 0;
 }
 
-/*  SOCIAL */
 .socialRight {
   display: flex;
   justify-content: flex-end;
@@ -150,8 +137,6 @@
 .socialIcon:hover{
   color:gray ;
 }
-
-/*  GRID POSITIONS  */
 
 .newsletter {
   grid-column: 2 / span 2;
@@ -172,8 +157,6 @@
   grid-column: 2;
   grid-row: 3 / span 2;
 }
-
-/* MOBILE*/
 
 @media (max-width: 768px) {
   .footerGrid {

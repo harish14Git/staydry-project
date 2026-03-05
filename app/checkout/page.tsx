@@ -1,28 +1,32 @@
 "use client";
 
-import { useCart } from "@/src/context/CartContext";
+import { useSelector, useDispatch } from "react-redux";
+import { clearCart } from "@/src/store/cartSlice";
+import { RootState } from "@/src/store/store";
 import { useRouter } from "next/navigation";
-import Navbar from "@/src/components/Navbar";
 import styles from "@/src/styles/checkout.module.css";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, clearCart } = useCart();
+  const cart = useSelector((state: RootState) => state.cart.items);
 
-  const totalPrice = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
+  // Read discount and coupon from Redux
+  const discount = useSelector((state: RootState) => state.cart.discount);
+  const appliedCoupon = useSelector((state: RootState) => state.cart.appliedCoupon);
+
+  const rawTotal = cart.reduce(
+    (total, item) => total + item.price * item.quantity, 0
   );
 
+  const finalTotal = Math.max(rawTotal - discount, 0).toFixed(2);
+
   const handlePlaceOrder = () => {
-    clearCart();
-    router.push("/order-success");
+    router.push("/order-confirmation");
   };
 
   if (cart.length === 0) {
     return (
       <main className={styles.page}>
-        <Navbar />
         <h2>Your cart is empty 🛒</h2>
       </main>
     );
@@ -31,32 +35,45 @@ export default function CheckoutPage() {
   return (
     <main className={styles.page}>
       <h1 className={styles.title}>Checkout</h1>
-
       <div className={styles.container}>
-        {/* ORDER SUMMARY */}
         <div className={styles.summary}>
+
           {cart.map(item => (
             <div key={item.id} className={styles.item}>
-              <span>
-                {item.title} × {item.quantity}
-              </span>
-              <span>₹ {item.price * item.quantity}</span>
+              <div className={styles.itemLeft}>
+                <img src={item.thumbnail} alt={item.title} className={styles.itemImage} />
+                <span className={styles.itemTitle}>{item.title} × {item.quantity}</span>
+              </div>
+              <span className={styles.itemPrice}>₹ {(item.price * item.quantity).toFixed(2)}</span>
             </div>
           ))}
 
-          <hr />
+          <hr className={styles.divider} />
 
-          <div className={styles.total}>
-            <strong>Total:</strong>
-            <strong>₹ {totalPrice}</strong>
+          <div className={styles.totalBox}>
+            <div className={styles.totalRow}>
+              <span>Subtotal</span>
+              <span>₹ {rawTotal.toFixed(2)}</span>
+            </div>
+
+            {discount > 0 && (
+              <div className={`${styles.totalRow} ${styles.discountRow}`}>
+                <span>Discount {appliedCoupon && `(${appliedCoupon})`}</span>
+                <span>- ₹ {discount.toFixed(2)}</span>
+              </div>
+            )}
+
+            <div className={`${styles.totalRow} ${styles.finalRow}`}>
+              <strong>Total</strong>
+              <strong>₹ {finalTotal}</strong>
+            </div>
           </div>
 
-          <button
-            className={styles.placeOrderBtn}
-            onClick={handlePlaceOrder}
-          >
-            Place Order
+        
+          <button className={styles.placeOrderBtn} onClick={handlePlaceOrder}>
+            Place Order 🚀
           </button>
+
         </div>
       </div>
     </main>

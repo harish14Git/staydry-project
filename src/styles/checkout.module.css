@@ -3,6 +3,7 @@
   background: #f7f8fa;
   padding: 6rem 5% 3rem;
 }
+
 .title {
   text-align: center;
   font-size: clamp(1.6rem, 4vw, 2rem);
@@ -10,6 +11,7 @@
   margin-bottom: 2rem;
   color: #222;
 }
+
 .container {
   display: flex;
   justify-content: center;
@@ -23,19 +25,7 @@
   padding: 1.5rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
-.container {
-  display: flex;
-  justify-content: center;
-}
 
-.summary {
-  width: 100%;
-  max-width: 520px;
-  background: #ffffff;
-  border-radius: 0.9rem;
-  padding: 1.5rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-}
 .item {
   display: flex;
   justify-content: space-between;
@@ -48,13 +38,70 @@
 .item:not(:last-child) {
   border-bottom: 1px solid #eee;
 }
-.total {
+
+.itemLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.itemImage {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.itemTitle {
+  font-size: 0.9rem;
+  color: #333;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemPrice {
+  font-weight: 600;
+  color: #ff5f00;
+  white-space: nowrap;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 1rem 0;
+}
+
+.totalBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.discountRow {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.finalRow {
   display: flex;
   justify-content: space-between;
   font-size: 1.1rem;
   font-weight: 700;
-  margin-top: 1.25rem;
   color: #000;
+  border-top: 1px solid #eee;
+  padding-top: 0.6rem;
+  margin-top: 0.3rem;
 }
 .placeOrderBtn {
   width: 100%;
@@ -78,12 +125,14 @@
 .placeOrderBtn:active {
   transform: scale(0.97);
 }
+
 .page h2 {
   text-align: center;
   margin-top: 3.5rem;
   font-size: 1.1rem;
   color: #777;
 }
+
 @media (max-width: 600px) {
   .summary {
     padding: 1.2rem;
@@ -93,7 +142,11 @@
     font-size: 0.9rem;
   }
 
-  .total {
+  .finalRow {
     font-size: 1rem;
+  }
+
+  .itemTitle {
+    max-width: 140px;
   }
 }

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback} from "react";
 import Link from "next/link";
 import styles from "@/src/styles/products.module.css";
 import Image from "next/image";
@@ -11,7 +11,9 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { addToCart } from "@/src/store/cartSlice";
+import { useSelector } from "react-redux";
+import { toggleWishlist } from "@/src/store/wishlistSlice";
+import type { RootState } from "@/src/store/store";
 
 export default function ProductsPage() {
   const [sort, setSort] = useState("");
@@ -20,13 +22,29 @@ export default function ProductsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const limit = 10;
-
   const dispatch = useDispatch();
+  const wishlist = useSelector((state: RootState) => state.wishlist.items);
+  const isWishlisted = (id: number) => wishlist.some((i: { id: number }) => i.id === id);
+
+  const [searchHistory, setSearchHistory] = useState<string[]>(() => {
+  if (typeof window !== "undefined") {
+    return JSON.parse(localStorage.getItem("searchHistory") || "[]");
+  }
+  return [];
+});
+const [showSuggestions, setShowSuggestions] = useState(false);
+
+const saveToHistory = useCallback((term: string) => {
+  if (!term.trim()) return;
+  const updated = [term, ...searchHistory.filter(s => s !== term)].slice(0, 5); 
+  setSearchHistory(updated);
+  localStorage.setItem("searchHistory", JSON.stringify(updated));
+}, [searchHistory]);
 
   const { data: categoriesData } = useQuery<Category[]>({
     queryKey: ["categories"],
     queryFn: fetchCategories,
-    staleTime: 1000 * 60 * 10,
+    staleTime: 1000 * 60 * 5,
   });
 
   const [search, setSearch] = useState(searchParams.get("search") || "");
@@ -90,11 +108,12 @@ export default function ProductsPage() {
   }, [search, category, router]);
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      SetDebouncedSearch(search);
-    }, 3000);
-    return () => clearTimeout(handler);
-  }, [search]);
+  const handler = setTimeout(() => {
+    SetDebouncedSearch(search);
+    if (search.trim()) saveToHistory(search); 
+  }, 2000);
+  return () => clearTimeout(handler);
+}, [search, saveToHistory]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -160,7 +179,7 @@ export default function ProductsPage() {
       </div>
 
       <div className={styles.controls}>
-        <input
+        {/* <input
           className={styles.search}
           placeholder="Search products..."
           value={search}
@@ -168,7 +187,53 @@ export default function ProductsPage() {
             setSearch(e.target.value);
             setPage(1);
           }}
-        />
+        /> */}
+        <div className={styles.searchWrapper}>
+  <input
+    className={styles.search}
+    placeholder="Search products..."
+    value={search}
+    onChange={e => {
+      setSearch(e.target.value);
+      setPage(1);
+    }}
+    onFocus={() => setShowSuggestions(true)}  
+    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+  />
+
+  {/* Suggestions dropdown */}
+  {showSuggestions && searchHistory.length > 0 && (
+    <div className={styles.suggestions}>
+      <p className={styles.suggestionsLabel}>Recent Searches</p>
+      {searchHistory.map((term, index) => (
+  <div key={index} className={styles.suggestionItem}>
+    <span
+      onClick={() => {
+        setSearch(term);
+        setShowSuggestions(false);
+      }}
+    >
+      🕐 {term}
+    </span>
+
+    {/* individual delete button */}
+    <button
+      className={styles.deleteHistoryItem}
+      onClick={() => {
+        const updated = searchHistory.filter((_, i) => i !== index);
+        setSearchHistory(updated);
+        localStorage.setItem("searchHistory", JSON.stringify(updated));
+      }}
+    >
+      ✕
+    </button>
+  </div>
+))}
+    
+    </div>
+  )}
+</div>
+
 
         <select
           className={styles.select}
@@ -196,19 +261,32 @@ export default function ProductsPage() {
           ? Array.from({ length: 8 }).map((_, index) => (
               <SkeletonCard key={index} />
             ))
-          : sortedProducts.map((product) => (
-
-              // ← changed from Link to div so we can have both
-              // Link (navigate) and button (add to cart) inside
-              <div key={product.id} className={styles.card}>
-
+          : sortedProducts.map((product, index) => (
+            
+              <div key={product.id} className={`${styles.card} ${styles.cardWrapper}`}>
+                <button
+                  className={styles.wishlistBtn}
+                  onClick={() => {
+                    dispatch(toggleWishlist({
+                      id: product.id,
+                      title: product.title,
+                      price: product.price,
+                      thumbnail: product.thumbnail,
+                    }));
+                  }}
+                >
+                  {isWishlisted(product.id) ? "❤️" : "🤍"}
+                </button>
                 <Link href={`/products/${product.id}`}>
                   <Image
                     width={400}
-                    height={400}
+                    height={400}unoptimized
                     src={product.thumbnail}
                     alt={product.title}
                     className={styles.image}
+                    priority={index < 4}
+                    loading={index < 4 ? "eager" : "lazy"}
+                    
                   />
                   <h3 className={styles.title}>{product.title}</h3>
                   <p className={styles.price}>From Rs. {product.price}</p>
@@ -224,7 +302,7 @@ export default function ProductsPage() {
 
       {showTop && (
         <button className={styles.scrollTop} onClick={scrollToTop}>
-          <Image src={srollup} alt="Scroll to top" width={40} height={40} />
+          <Image src={srollup} alt="Scroll to top" width={40} height={40} unoptimized />
         </button>
       )}
     </main>
